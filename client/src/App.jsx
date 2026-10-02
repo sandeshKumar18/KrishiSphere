@@ -1,122 +1,190 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import AppShell from "./components/layout/AppShell.jsx";
+import { useAuth } from "./context/AuthContext.jsx";
+
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Fields from "./pages/Fields.jsx";
+import FieldDetails from "./pages/FieldDetails.jsx";
+import CropCycles from "./pages/CropCycles.jsx";
+import CropCycleDashboard from "./pages/CropCycleDashboard.jsx";
+import Market from "./pages/Market.jsx";
+import AIAdvice from "./pages/AIAdvice.jsx";
+import Settings from "./pages/Settings.jsx";
+import CropCatalog from "./pages/CropCatalog.jsx";
+import GovernmentSchemes from "./pages/GovernmentSchemes.jsx";
+import Guidance from "./pages/Guidance.jsx";
+
+const ProtectedRoute = ({
+  children,
+}) => {
+  const { user, loading } =
+    useAuth();
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AppShell>
+      {children}
+    </AppShell>
+  );
+};
 
-      <div className="ticks"></div>
+const App = () => (
+  <BrowserRouter>
+    <Routes>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Route
+        path="/login"
+        element={<Login />}
+      />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+      <Route
+        path="/signup"
+        element={<Signup />}
+      />
 
-export default App
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/fields"
+        element={
+          <ProtectedRoute>
+            <Fields />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/fields/:fieldId"
+        element={
+          <ProtectedRoute>
+            <FieldDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/crop-cycles"
+        element={
+          <ProtectedRoute>
+            <CropCycles />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/crop-cycles/:cropCycleId"
+        element={
+          <ProtectedRoute>
+            <CropCycleDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/market"
+        element={
+          <ProtectedRoute>
+            <Market />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ai-advice"
+        element={
+          <ProtectedRoute>
+              <AIAdvice />
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/guidance"
+        element={
+          <ProtectedRoute>
+            <Guidance />
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/crops"
+        element={
+          <ProtectedRoute>
+            <CropCatalog />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/government-schemes"
+        element={
+            <ProtectedRoute>
+              <GovernmentSchemes />
+            </ProtectedRoute>
+            }
+      />
+
+      <Route
+        path="*"
+        element={
+          <Navigate
+            to="/"
+            replace
+          />
+        }
+      />
+
+    </Routes>
+  </BrowserRouter>
+);
+
+export default App;

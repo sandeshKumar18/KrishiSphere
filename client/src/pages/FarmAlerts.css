@@ -1,0 +1,303 @@
+.farm-alerts {
+  position: relative;
+}
+
+.farm-alert-trigger {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.farm-alert-trigger:hover,
+.farm-alert-trigger.open {
+  background: var(--surface-soft);
+  color: var(--primary);
+}
+
+.farm-alert-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+
+  min-width: 17px;
+  height: 17px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0 4px;
+
+  border: 2px solid white;
+  border-radius: 999px;
+
+  background: var(--danger);
+  color: white;
+
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.farm-alert-panel {
+  position: fixed;
+
+  top: calc(
+    var(--topbar-height) + 10px
+  );
+  right: 22px;
+
+  z-index: 1500;
+
+  width: min(
+    390px,
+    calc(100vw - 28px)
+  );
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 17px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow-lg);
+}
+
+.farm-alert-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 18px 18px 15px;
+
+  border-bottom: 1px solid
+    var(--border-soft);
+}
+
+.farm-alert-header span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.farm-alert-header h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.farm-alert-close {
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  flex: 0 0 auto;
+
+  border-radius: 9px;
+
+  background: var(--surface-soft);
+  color: var(--text-muted);
+
+  cursor: pointer;
+}
+
+.farm-alert-close:hover {
+  color: var(--text);
+}
+
+.farm-alert-list {
+  display: flex;
+  flex-direction: column;
+
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.farm-alert-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 13px 15px;
+
+  border: 0;
+  border-bottom: 1px solid
+    var(--border-soft);
+
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease;
+}
+
+.farm-alert-item:last-child {
+  border-bottom: 0;
+}
+
+.farm-alert-item:hover {
+  background: var(--surface-soft);
+}
+
+.farm-alert-icon {
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 10px;
+}
+
+.farm-alert-icon.field {
+  background: #f8eee4;
+  color: #a06f32;
+}
+
+.farm-alert-icon.task {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.farm-alert-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.farm-alert-content strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.farm-alert-content span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.farm-alert-content small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+}
+
+.farm-alert-arrow {
+  flex: 0 0 auto;
+
+  color: var(--text-muted);
+}
+
+.farm-alert-empty {
+  padding: 28px 20px;
+
+  text-align: center;
+
+  color: var(--text-muted);
+
+  font-size: 11px;
+}
+
+.farm-alert-empty.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 30px 20px;
+}
+
+.farm-alert-success-icon {
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  margin-bottom: 4px;
+
+  border-radius: 12px;
+
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.farm-alert-empty.success strong {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.farm-alert-empty.success span {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.farm-alert-backdrop {
+  position: fixed;
+  inset: var(--topbar-height) 0 0;
+
+  z-index: 1490;
+}
+
+@media (max-width: 640px) {
+  .farm-alert-panel {
+    top: calc(
+      var(--topbar-height) + 8px
+    );
+
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+  }
+}

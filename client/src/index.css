@@ -1,111 +1,260 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --primary: #2f7545;
+  --primary-dark: #1f5a34;
+  --primary-soft: #eaf4e9;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --bg: #f5f7f3;
+  --surface: #ffffff;
+  --surface-soft: #f8faf7;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  --text: #17231c;
+  --text-secondary: #536158;
+  --text-muted: #768178;
+
+  --border: #e1e8e0;
+  --border-soft: #edf1ec;
+
+  --success: #2f7545;
+  --warning: #c88a18;
+  --danger: #c94b4b;
+  --info: #3974b7;
+  --purple: #7357b7;
+
+  --topbar-height: 68px;
+  --sidebar-collapsed-width: 72px;
+  --sidebar-expanded-width: 255px;
+  --content-max-width: 1480px;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 2px 8px rgba(30, 50, 35, 0.05);
+  --shadow-md: 0 10px 30px rgba(30, 50, 35, 0.08);
+  --shadow-lg: 0 20px 50px rgba(30, 50, 35, 0.14);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
   color: var(--text);
   background: var(--bg);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
 
-body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+html {
+  width: 100%;
+  max-width: 100%;
   margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(47, 117, 69, 0.22);
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-shell {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+
+.app-main {
+  position: relative;
+  width: calc(100% - var(--sidebar-collapsed-width));
+  max-width: calc(100% - var(--sidebar-collapsed-width));
+  min-width: 0;
+  margin-left: var(--sidebar-collapsed-width);
+  margin-right: 0;
+  padding-top: var(--topbar-height);
+  min-height: 100vh;
+  overflow-x: clip;
+  transition:
+    width 0.24s ease,
+    max-width 0.24s ease,
+    margin-left 0.24s ease;
+}
+
+
+@media (min-width: 901px) {
+  body.sidebar-is-open .app-main {
+    width: calc(100% - var(--sidebar-expanded-width));
+    max-width: calc(100% - var(--sidebar-expanded-width));
+    margin-left: var(--sidebar-expanded-width);
+  }
+}
+
+
+.page-container {
+  width: min(
+    calc(100% - 40px),
+    var(--content-max-width)
+  );
+
+  max-width: 100%;
+  min-width: 0;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+main,
+section,
+article,
+aside,
+header,
+nav,
+div {
+  min-width: 0;
+}
+
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+
+@media (max-width: 900px) {
+  :root {
+    --topbar-height: 64px;
+  }
+
+  .app-main,
+  body.sidebar-is-open .app-main {
+    width: 100%;
+    max-width: 100%;
+
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .page-container {
+    width: min(
+      calc(100% - 32px),
+      var(--content-max-width)
+    );
+    max-width: 100%;
+    padding-top: 26px;
+    padding-bottom: 42px;
+  }
+}
+
+
+@media (max-width: 640px) {
+  :root {
+    --topbar-height: 60px;
+  }
+
+  .page-container {
+    width: calc(100% - 24px);
+
+    max-width: 100%;
+
+    padding-top: 20px;
+    padding-bottom: 36px;
+  }
+}
+
+
+
+@media (max-width: 400px) {
+  .page-container {
+    width: calc(100% - 20px);
+  }
+}
+
+
+.sidebar-backdrop {
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+}
+
+@media (min-width: 901px) {
+  .sidebar-backdrop {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar-backdrop {
+    display: block;
+  }
 }
