@@ -16,6 +16,7 @@ import {
   Sun,
   Thermometer,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
@@ -67,15 +68,6 @@ const formatDate = (value, fallback = "Not set") => {
     year: "numeric",
   });
 };
-
-const getGreeting = () => {
-  const hour = new Date().getHours();
-
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
-};
-
 
 
 const getProgressValue = (cycle, dashboard) => {
@@ -223,6 +215,7 @@ const getLatestMarketRecord = (records) => {
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState("");
@@ -248,6 +241,15 @@ const Dashboard = () => {
     user?.fullName?.split(" ")[0] ||
     user?.username?.split(" ")[0] ||
     "Farmer";
+
+    const getGreeting = () => {
+      const hour = new Date().getHours();
+
+      if (hour < 12) return t("dashboard.goodMorning");
+      if (hour < 18) return t("dashboard.goodAfternoon");
+
+      return t("dashboard.goodEvening");
+    };
 
   const selectedField = useMemo(
     () =>
@@ -718,7 +720,7 @@ const Dashboard = () => {
       <section className="db3-header">
         <div>
           <span className="db3-eyebrow">
-            FARM COMMAND CENTER
+            {t("dashboard.commandCenter")}
           </span>
 
           <h1>
@@ -726,12 +728,9 @@ const Dashboard = () => {
           </h1>
 
           <p>
-            One clear view of your field, crop progress,
-            today&apos;s work, and farm conditions.
+            {t("dashboard.overviewDescription")}
           </p>
         </div>
-
-        
       </section>
 
       {error && (
@@ -742,39 +741,37 @@ const Dashboard = () => {
       )}
 
 
-      {fields.length > 0 && ( 
-        <section className="db-farm-overview">
+      {fields.length > 0 && (
+          <section className="db-farm-overview">
 
-          <div className="db-farm-overview-header">
-            <div>
-              <span className="dashboard-card-kicker">
-                FARM OVERVIEW
-              </span>
+            <div className="db-farm-overview-header">
+              <div>
+                <span className="dashboard-card-kicker">
+                  {t("dashboard.title")}
+                </span>
 
-              <h2>
-                Your whole farm at a glance
-              </h2>
+                <h2>
+                  {t("dashboard.wholeFarmAtGlance")}
+                </h2>
 
-              <p>
-                Monitor fields, crop cycles,
-                soil coverage and areas that need
-                attention.
-              </p>
+                <p>
+                  {t("dashboard.farmOverviewDescription")}
+                </p>
+              </div>
+
+              <div className="db-farm-task-chip">
+                <CalendarDays size={15} />
+
+                <span>
+                  {todayTasks.pending || 0}{" "}
+                  {t("dashboard.tasksPendingToday")}
+                </span>
+              </div>
             </div>
-
-            <div className="db-farm-task-chip">
-              <CalendarDays size={15} />
-
-              <span>
-                {todayTasks.pending || 0} tasks
-                pending today
-              </span>
-            </div>
-          </div>
 
           {farmDashboardLoading ? (
             <div className="db-farm-summary-loading">
-              Loading farm insights...
+              {t("dashboard.loadingFarmInsights")}
             </div>
           ) : (
             <div className="db-farm-summary-grid">
@@ -785,12 +782,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Fields</span>
+                  <span>{t("dashboard.fields")}</span>
                   <strong>
                     {farmSummary.totalFields || 0}
                   </strong>
                   <small>
-                    Total farm fields
+                    {t("dashboard.totalFarmFields")}
                   </small>
                 </div>
               </div>
@@ -801,12 +798,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Active cycles</span>
+                  <span>{t("dashboard.activeCycles")}</span>
                   <strong>
                     {farmSummary.activeCycles || 0}
                   </strong>
                   <small>
-                    Currently growing
+                    {t("dashboard.currentlyGrowing")}
                   </small>
                 </div>
               </div>
@@ -817,12 +814,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Planned</span>
+                  <span>{t("dashboard.planned")}</span>
                   <strong>
                     {farmSummary.plannedCycles || 0}
                   </strong>
                   <small>
-                    Ready to begin
+                    {t("dashboard.readyToBegin")}
                   </small>
                 </div>
               </div>
@@ -833,12 +830,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Completed</span>
+                  <span>{t("dashboard.completed")}</span>
                   <strong>
                     {farmSummary.completedCycles || 0}
                   </strong>
                   <small>
-                    Finished crop cycles
+                    {t("dashboard.finishedCropCycles")}
                   </small>
                 </div>
               </div>
@@ -849,12 +846,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Needs attention</span>
+                  <span>{t("dashboard.needsAttention")}</span>
                   <strong>
                     {farmSummary.fieldsNeedingAttention || 0}
                   </strong>
                   <small>
-                    Fields requiring action
+                    {t("dashboard.fieldsRequiringAction")}
                   </small>
                 </div>
               </div>
@@ -865,12 +862,12 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <span>Soil coverage</span>
+                  <span>{t("dashboard.soilCoverage")}</span>
                   <strong>
                     {farmSummary.soilTestCoverage || 0}%
                   </strong>
                   <small>
-                    Fields with soil tests
+                    {t("dashboard.fieldsWithSoilTests")}
                   </small>
                 </div>
               </div>
@@ -884,11 +881,11 @@ const Dashboard = () => {
         <div className="field-picker-top">
 
           <div className="db3-select-option-text">
-            <h1>Select Field</h1>
+            <h1>{t("dashboard.selectField")}</h1>
           </div> 
           <div className="db3-field-picker">
             <span>
-              Viewing field
+              {t("dashboard.viewingField")}
             </span>
 
             <div>
@@ -903,7 +900,7 @@ const Dashboard = () => {
 
                   return (
                     <option key={id} value={id}>
-                      {field.name || "Unnamed field"}
+                      {field.name || t("dashboard.unnamedField")}
                     </option>
                   );
                 })}
@@ -925,23 +922,20 @@ const Dashboard = () => {
 
           <div>
             <span className="db3-eyebrow">
-              FIRST STEP
+              {t("dashboard.firstStep")}
             </span>
 
-            <h2>Set up your first field</h2>
+            <h2>{t("dashboard.setupFirstField")}</h2>
 
             <p>
-              Add a field and its soil test. KrishiSphere
-              will then build the crop recommendation,
-              crop cycle, tasks, weather, market and AI
-              context around it.
+              {t("dashboard.setupFirstFieldDescription")}
             </p>
 
             <Link
               to="/fields"
               className="db3-primary"
             >
-              Add field
+              {t("dashboard.addField")}
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -950,44 +944,48 @@ const Dashboard = () => {
         <>
           <section className="db3-pulse">
             <div>
-              <span>FIELD</span>
-              <strong>
-                {selectedField?.name || "—"}
-              </strong>
-              <small>
-                {fieldLocation || "Location not specified"}
-              </small>
+              <span>{t("dashboard.field")}</span>
+                <strong>
+                  {selectedField?.name || "—"}
+                </strong>
+                <small>
+                  {fieldLocation || t("dashboard.locationNotSpecified")}
+                </small>
             </div>
 
             <div>
-              <span>SOIL</span>
-              <strong>
-                {soilTest ? "Tested" : "Not tested"}
-              </strong>
-              <small>
-                {soilTest
-                  ? `pH ${soilTest.pH ?? soilTest.ph ?? "—"}`
-                  : "Add a soil test"}
-              </small>
+              <span>{t("dashboard.soil")}</span>
+                <strong>
+                  {soilTest
+                    ? t("dashboard.tested")
+                    : t("dashboard.notTested")}
+                </strong>
+                <small>
+                  {soilTest
+                    ? `pH ${soilTest.pH ?? soilTest.ph ?? "—"}`
+                    : t("dashboard.addSoilTest")}
+                </small>
             </div>
 
             <div>
-              <span>CROP</span>
-              <strong>
-                {crop?.name || "Not selected"}
-              </strong>
-              <small>
-                {currentStage?.name || "No active cycle"}
-              </small>
+              <span>{t("dashboard.crop")}</span>
+                <strong>
+                  {crop?.name || t("dashboard.notSelected")}
+                </strong>
+                <small>
+                  {currentStage?.name || t("dashboard.noActiveCycle")}
+                </small>
             </div>
 
             <div>
-              <span>PROGRESS</span>
-              <strong>{currentCycle ? `${progress}%` : "—"}</strong>
+              <span>{t("dashboard.progress")}</span>
+              <strong>
+                {currentCycle ? `${progress}%` : "—"}
+              </strong>
               <small>
                 {currentCycle
                   ? progressLabel
-                  : "Start a crop cycle"}
+                  : t("dashboard.startCropCycle")}
               </small>
             </div>
           </section>
@@ -1007,7 +1005,7 @@ const Dashboard = () => {
 
               <div className="db3-next-action-content">
                 <span className="db3-card-kicker">
-                  NEXT ACTION
+                  {t("dashboard.nextAction")}
                 </span>
 
                 <h2>

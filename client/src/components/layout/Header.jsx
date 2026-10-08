@@ -4,6 +4,8 @@ import {
   Menu,
 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import krishiSphereLogo from "../../assets/KrishiSphere_LOGO.png";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
@@ -14,6 +16,7 @@ import FarmAlerts from "../../pages/FarmAlerts.jsx";
 const Header = ({ onMenuClick }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const farmerName =
     user?.name ||
@@ -23,6 +26,14 @@ const Header = ({ onMenuClick }) => {
 
   const avatarLetter =
     farmerName.charAt(0).toUpperCase();
+
+    const changeLanguage = (language) => {
+  i18n.changeLanguage(language);
+    localStorage.setItem(
+      "krishisphere-language",
+      language
+    );
+  };
 
   return (
     <header className="topbar">
@@ -88,6 +99,36 @@ const Header = ({ onMenuClick }) => {
       </div>
 
       <div className="topbar-right">
+
+
+        <div
+          className="language-switcher"
+          aria-label="Language selection"
+        >
+          <button
+            type="button"
+            className={
+              i18n.language === "en"
+                ? "language-option active"
+                : "language-option"
+            }
+            onClick={() => changeLanguage("en")}
+          >
+            EN
+          </button>
+
+          <button
+            type="button"
+            className={
+              i18n.language === "hi"
+                ? "language-option active"
+                : "language-option"
+            }
+            onClick={() => changeLanguage("hi")}
+          >
+            हिंदी
+          </button>
+        </div>
 
         <div
           className="notification-icon-only"

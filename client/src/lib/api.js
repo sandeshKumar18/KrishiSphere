@@ -29,8 +29,7 @@ const request = async (
     }
   }
 
-  const requestId =
-    ++requestCounter;
+  const requestId = ++requestCounter;
 
   const {
     skipDeduplication,
@@ -38,63 +37,59 @@ const request = async (
   } = options;
 
   const executeRequest = async () => {
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}${endpoint}`,
-        {
-          ...fetchOptions,
-          headers: {
-            "Content-Type":
-              "application/json",
+    const response = await fetch(
+      `${API_BASE_URL}${endpoint}`,
+      {
+        ...fetchOptions,
+        headers: {
+          "Content-Type":
+            "application/json",
 
-            ...(token
-              ? {
-                  Authorization:
-                    `Bearer ${token}`,
-                }
-              : {}),
+          ...(token
+            ? {
+                Authorization:
+                  `Bearer ${token}`,
+              }
+            : {}),
 
-            ...(fetchOptions.headers || {}),
-          },
-        }
+          ...(fetchOptions.headers || {}),
+        },
+      }
+    );
+
+    let data = null;
+
+    const contentType =
+      response.headers.get(
+        "content-type"
       );
 
-      let data = null;
+    if (
+      contentType?.includes(
+        "application/json"
+      )
+    ) {
+      data = await response.json();
+    } else {
+      const text =
+        await response.text();
 
-      const contentType =
-        response.headers.get(
-          "content-type"
-        );
-
-      if (
-        contentType?.includes(
-          "application/json"
-        )
-      ) {
-        data = await response.json();
-      } else {
-        const text =
-          await response.text();
-
-        data = text
-          ? { message: text }
-          : {};
-      }
-
-      if (!response.ok) {
-        const message =
-          data?.message ||
-          data?.error ||
-          data?.errors?.[0]?.message ||
-          `Request failed with status ${response.status}`;
-
-        throw new Error(message);
-      }
-
-      return data;
-    } catch (error) {
-      throw error;
+      data = text
+        ? { message: text }
+        : {};
     }
+
+    if (!response.ok) {
+      const message =
+        data?.message ||
+        data?.error ||
+        data?.errors?.[0]?.message ||
+        `Request failed with status ${response.status}`;
+
+      throw new Error(message);
+    }
+
+    return data;
   };
 
   if (

@@ -1,0 +1,130 @@
+const hi = {
+  translation: {
+    language: "हिंदी",
+
+    nav: {
+        overview: "अवलोकन",
+        myFields: "मेरे खेत",
+        cropCycles: "फसल चक्र",
+        market: "बाज़ार",
+        aiAdvice: "AI सलाह",
+        governmentSchemes: "सरकारी योजनाएँ",
+        cropCatalog: "फसल सूची",
+        settings: "सेटिंग्स",
+        dashboard: "डैशबोर्ड",
+        fields: "खेत",
+        soil: "मिट्टी",
+        profile: "प्रोफ़ाइल",
+        logout: "लॉग आउट",
+    },
+
+    common: {
+      loading: "लोड हो रहा है...",
+      save: "सहेजें",
+      cancel: "रद्द करें",
+      close: "बंद करें",
+      retry: "फिर से प्रयास करें",
+      submit: "जमा करें",
+      search: "खोजें",
+      open: "खोलें",
+      back: "वापस",
+      next: "आगे",
+    },
+
+    dashboard: {
+      title: "खेत डैशबोर्ड",
+      viewingField: "देखा जा रहा खेत",
+      activeField: "सक्रिय खेत",
+      weather: "मौसम",
+      soil: "मिट्टी",
+      market: "बाज़ार",
+      latestSoilTest: "नवीनतम मिट्टी परीक्षण",
+      temperature: "तापमान",
+      humidity: "नमी",
+      rainfall: "वर्षा",
+      nitrogen: "नाइट्रोजन",
+      phosphorus: "फॉस्फोरस",
+      potassium: "पोटैशियम",
+      ph: "pH",
+      commandCenter: "कृषि नियंत्रण केंद्र",
+        overviewDescription: "आपके खेत, फसल की प्रगति, आज के काम और खेत की स्थिति की एक स्पष्ट जानकारी।",
+        goodMorning: "सुप्रभात",
+        goodAfternoon: "नमस्कार",
+        goodEvening: "शुभ संध्या",
+        wholeFarmAtGlance: "एक नज़र में पूरा खेत",
+
+        farmOverviewDescription: "खेतों, फसल चक्रों, मिट्टी की जांच और उन क्षेत्रों पर नज़र रखें जिन पर ध्यान देने की आवश्यकता है।",
+        tasksPendingToday: "काम आज बाकी हैं",
+        loadingFarmInsights: "खेत की जानकारी लोड हो रही है...",
+        fields: "खेत",
+        totalFarmFields: "कुल खेत",
+        activeCycles: "सक्रिय फसल चक्र",
+        currentlyGrowing: "वर्तमान में उग रही फसलें",
+        planned: "नियोजित",
+        readyToBegin: "शुरू करने के लिए तैयार",
+        completed: "पूर्ण",
+        finishedCropCycles: "पूरे किए गए फसल चक्र",
+        needsAttention: "ध्यान देने की आवश्यकता",
+        fieldsRequiringAction: "जिन खेतों पर कार्रवाई आवश्यक है",
+        soilCoverage: "मिट्टी जांच कवरेज",
+        fieldsWithSoilTests: "मिट्टी जांच वाले खेत",
+        selectField: "खेत चुनें",
+        unnamedField: "बिना नाम का खेत",
+        firstStep: "पहला कदम",
+        setupFirstField: "अपना पहला खेत तैयार करें",
+        setupFirstFieldDescription:"एक खेत और उसकी मिट्टी की जांच जोड़ें। इसके बाद KrishiSphere आपके लिए फसल की सिफारिश, फसल चक्र, कार्य, मौसम, बाज़ार और AI जानकारी तैयार करेगा।",
+        addField: "खेत जोड़ें",
+        field: "खेत",
+        locationNotSpecified: "स्थान निर्दिष्ट नहीं है",
+
+        soil: "मिट्टी",
+        tested: "जांच की गई",
+        notTested: "जांच नहीं की गई",
+        addSoilTest: "मिट्टी की जांच जोड़ें",
+
+        crop: "फसल",
+        notSelected: "चयन नहीं किया गया",
+        noActiveCycle: "कोई सक्रिय चक्र नहीं",
+
+        progress: "प्रगति",
+        startCropCycle: "फसल चक्र शुरू करें",
+
+        nextAction: "अगली कार्रवाई",
+    },
+
+    ai: {
+      title: "KrishiSphere AI",
+      askAboutCrop: "अपनी फसल के बारे में पूछें",
+      ask: "AI से पूछें",
+      thinking: "सोचा जा रहा है...",
+      placeholder:
+        "जैसे: इस अवस्था में मुझे किन बातों का ध्यान रखना चाहिए?",
+    },
+
+    fields: {
+      title: "मेरे खेत",
+      addField: "खेत जोड़ें",
+      fieldName: "खेत का नाम",
+      area: "क्षेत्रफल",
+      state: "राज्य",
+      district: "ज़िला",
+      soilType: "मिट्टी का प्रकार",
+      openField: "खेत खोलें",
+    },
+
+    errors: {
+      failedToLoadFields: "खेतों को लोड नहीं किया जा सका।",
+      invalidFieldArea: "कृपया सही खेत का क्षेत्रफल दर्ज करें।",
+      fieldNameRequired: "कृपया खेत का नाम दर्ज करें।",
+    },
+
+    sidebar: {
+        workspace: "कृषि कार्यक्षेत्र",
+        closeNavigation: "नेविगेशन बंद करें",
+        growSmarter: "बेहतर खेती करें",
+        betterDecisions: "बेहतर खेत निर्णय।",
+    },
+  },
+};
+
+export default hi;

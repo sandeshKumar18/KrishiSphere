@@ -12,50 +12,60 @@ import {
 } from "lucide-react";
 
 import "./Sidebar.css";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const navigation = [
-    {
-      label: "Overview",
-      path: "/",
-      icon: BarChart3,
-    },
-    {
-      label: "My Fields",
-      path: "/fields",
-      icon: Leaf,
-    },
-    {
-      label: "Crop Cycles",
-      path: "/crop-cycles",
-      icon: Sprout,
-    },
-    {
-      label: "Market",
-      path: "/market",
-      icon: ShoppingBag,
-    },
-    {
-      label: "AI Advice",
-      path: "/ai-advice",
-      icon: Sparkles,
-    },
-    {
-      label: "Government Schemes",
-      path: "/government-schemes",
-      icon: Landmark,
-    },
-    {
-      label: "Crop Catalog",
-      path: "/crops",
-      icon: Leaf,
-    },
-    {
-      label: "Settings",
-      path: "/settings",
-      icon: Settings,
-    },
-  ];
+  {
+    key: "overview",
+    label: t("nav.overview"),
+    path: "/",
+    icon: BarChart3,
+  },
+  {
+    key: "fields",
+    label: t("nav.myFields"),
+    path: "/fields",
+    icon: Leaf,
+  },
+  {
+    key: "cropCycles",
+    label: t("nav.cropCycles"),
+    path: "/crop-cycles",
+    icon: Sprout,
+  },
+  {
+    key: "market",
+    label: t("nav.market"),
+    path: "/market",
+    icon: ShoppingBag,
+  },
+  {
+    key: "aiAdvice",
+    label: t("nav.aiAdvice"),
+    path: "/ai-advice",
+    icon: Sparkles,
+  },
+  {
+    key: "governmentSchemes",
+    label: t("nav.governmentSchemes"),
+    path: "/government-schemes",
+    icon: Landmark,
+  },
+  {
+    key: "cropCatalog",
+    label: t("nav.cropCatalog"),
+    path: "/crops",
+    icon: Leaf,
+  },
+  {
+    key: "settings",
+    label: t("nav.settings"),
+    path: "/settings",
+    icon: Settings,
+  },
+];
 
   return (
     <aside
@@ -70,7 +80,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           <div className="drawer-brand-text">
             <span>KrishiSphere</span>
-            <small>Farm workspace</small>
+            <small>{t("sidebar.workspace")}</small>
           </div>
         </div>
 
@@ -78,8 +88,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           type="button"
           className="drawer-close"
           onClick={onClose}
-          aria-label="Close navigation"
-          title="Close navigation"
+          aria-label={t("sidebar.closeNavigation")}
+          title={t("sidebar.closeNavigation")}
         >
           <X size={19} />
         </button>
@@ -91,7 +101,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           return (
             <NavLink
-              key={item.label}
+              key={item.key}
               to={item.path}
               end={item.path === "/"}
               onClick={onClose}
@@ -117,8 +127,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         <div className="drawer-footer-content">
-          <strong>Grow smarter</strong>
-          <span>Better field decisions.</span>
+          <strong>{t("sidebar.growSmarter")}</strong>
+          <span>{t("sidebar.betterDecisions")}</span>
         </div>
       </div>
     </aside>
