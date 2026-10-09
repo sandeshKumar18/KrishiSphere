@@ -1039,7 +1039,7 @@ const Dashboard = () => {
 
                   <span className="db3-location">
                     <MapPin size={13} />
-                    {fieldLocation || "Field location"}
+                    {fieldLocation || t("dashboard.fieldLocation")}
                   </span>
                 </div>
 
@@ -1051,25 +1051,25 @@ const Dashboard = () => {
                   <div>
                     <span>
                       {isCompleted
-                        ? "COMPLETED CROP"
-                        : "CURRENT CROP"}
+                        ? t("dashboard.completedCrop")
+                        : t("dashboard.currentCrop")}
                     </span>
 
-                    <h2>{crop?.name || "Crop cycle"}</h2>
+                    <h2>{crop?.name || t("dashboard.cropCycle")}</h2>
 
                     <p>
                       {isCompleted
                         ? currentStage?.name ||
-                          "Crop lifecycle completed"
+                          t("dashboard.cropLifecycleCompleted")
                         : currentStage?.name ||
-                          "Lifecycle ready to begin"}
+                          t("dashboard.lifecycleReadyToBegin")}
                     </p>
                   </div>
                 </div>
 
                 <div className="db3-progress-row">
                   <div>
-                    <span>Lifecycle progress</span>
+                    <span>{t("dashboard.lifecycleProgress")}</span>
                     <strong>{progress}%</strong>
                   </div>
 
@@ -1088,7 +1088,7 @@ const Dashboard = () => {
 
                 <div className="db3-crop-details">
                   <div>
-                    <span>STARTED</span>
+                    <span>{t("dashboard.started")}</span>
                     <strong>
                       {formatDate(
                         currentCycle?.startDate
@@ -1099,8 +1099,8 @@ const Dashboard = () => {
                   <div>
                     <span>
                       {isCompleted
-                        ? "HARVEST"
-                        : "EXPECTED HARVEST"}
+                        ? t("dashboard.harvest")
+                        : t("dashboard.expectedHarvest")}
                     </span>
 
                     <strong>
@@ -1113,11 +1113,11 @@ const Dashboard = () => {
                   </div>
 
                   <div>
-                    <span>NEXT</span>
+                    <span>{t("dashboard.next")}</span>
 
                     <strong>
                       {isCompleted
-                        ? "Completed"
+                        ? t("dashboard.completed")
                         : nextStage?.name ||
                           currentStage?.name ||
                           "—"}
@@ -1130,7 +1130,7 @@ const Dashboard = () => {
                     to={cropDashboardPath}
                     className="db3-primary"
                   >
-                    Open crop dashboard
+                    {t("dashboard.openCropDashboard")}
                     <ArrowRight size={16} />
                   </Link>
                 )}
@@ -1140,9 +1140,9 @@ const Dashboard = () => {
                 <div className="db3-card-heading">
                   <div>
                     <span className="db3-card-kicker">
-                      TODAY
+                      {t("dashboard.today")}
                     </span>
-                    <h2>What needs attention</h2>
+                    <h2>{t("dashboard.whatNeedsAttention")}</h2>
                   </div>
 
                   <CalendarDays size={19} />
@@ -1173,12 +1173,12 @@ const Dashboard = () => {
                           <section>
                             <strong>
                               {task.title ||
-                                "Crop management task"}
+                                t("dashboard.cropManagementTask")}
                             </strong>
 
                             <span>
                               {task.description ||
-                                "Continue the current crop plan."}
+                                 t("dashboard.continueCropPlan")}
                             </span>
                           </section>
                         </div>
@@ -1189,17 +1189,17 @@ const Dashboard = () => {
                     <CheckCircle2 size={28} />
                     <strong>
                       {isCompleted
-                        ? "Crop cycle completed"
+                        ?  t("dashboard.cropCycleCompleted")
                         : tasks.length
-                        ? "Current stage is clear"
-                        : "No tasks yet"}
+                        ? t("dashboard.currentStageClear")
+                        : t("dashboard.noTasksYet")}
                     </strong>
                     <p>
                       {isCompleted
-                        ? "There is no pending farm work for this cycle."
+                        ?  t("dashboard.noPendingWork")
                         : tasks.length
-                        ? "You can continue from the crop dashboard."
-                        : "Tasks will appear when the crop plan is active."}
+                        ? t("dashboard.continueFromCropDashboard")
+                        : t("dashboard.tasksAppearWhenActive")}
                     </p>
                   </div>
                 )}
@@ -1209,7 +1209,7 @@ const Dashboard = () => {
                     to={cropDashboardPath}
                     className="db3-text-link"
                   >
-                    View all crop work
+                    {t("dashboard.viewAllCropWork")}
                     <ArrowRight size={14} />
                   </Link>
                 )}
@@ -1223,17 +1223,15 @@ const Dashboard = () => {
 
               <div>
                 <span className="db3-card-kicker">
-                  READY FOR THE NEXT STEP
+                  {t("dashboard.readyForNextStep")}
                 </span>
 
                 <h2>
-                  Your field needs a crop decision
+                  {t("dashboard.fieldNeedsCropDecision")}
                 </h2>
 
                 <p>
-                  Open the field, add or review the soil
-                  test, generate a recommendation, and
-                  select the crop you want to track.
+                  {t("dashboard.cropDecisionDescription")}
                 </p>
               </div>
 
@@ -1241,7 +1239,7 @@ const Dashboard = () => {
                 to={fieldPath}
                 className="db3-primary"
               >
-                Open field
+                {t("dashboard.openField")}
                 <ArrowRight size={16} />
               </Link>
             </section>
@@ -1252,9 +1250,9 @@ const Dashboard = () => {
               <div className="db3-card-heading">
                 <div>
                   <span className="db3-card-kicker">
-                    FIELD CONDITIONS
+                    {t("dashboard.fieldConditions")}
                   </span>
-                  <h2>Weather & soil</h2>
+                   <h2>{t("dashboard.weatherAndSoil")}</h2>
                 </div>
 
                 <CloudRain size={19} />
@@ -1264,7 +1262,7 @@ const Dashboard = () => {
                 <div>
                   <span>
                     <Thermometer size={14} />
-                    Temperature
+                    {t("dashboard.temperature")}
                   </span>
 
                   <strong>
@@ -1278,7 +1276,7 @@ const Dashboard = () => {
                 <div>
                   <span>
                     <Droplets size={14} />
-                    Humidity
+                    {t("dashboard.humidity")}
                   </span>
 
                   <strong>
@@ -1292,7 +1290,7 @@ const Dashboard = () => {
                 <div>
                   <span>
                     <CloudRain size={14} />
-                    Rainfall
+                    {t("dashboard.rainfall")}
                   </span>
 
                   <strong>
@@ -1306,7 +1304,7 @@ const Dashboard = () => {
                 <div>
                   <span>
                     <FlaskConical size={14} />
-                    Soil pH
+                    {t("dashboard.soilPh")}
                   </span>
 
                   <strong>
@@ -1314,17 +1312,17 @@ const Dashboard = () => {
                       ? soilTest.pH ??
                         soilTest.ph ??
                         "—"
-                      : "Not tested"}
+                      : t("dashboard.notTested")}
                   </strong>
                 </div>
               </div>
 
               <p className="db3-muted">
                 {selectedFieldWeatherLoading
-                  ? "Loading current weather..."
+                  ? t("dashboard.loadingCurrentWeather")
                   : selectedFieldWeather
-                  ? "Current weather is available for this field."
-                  : "Weather data is not available right now."}
+                  ? t("dashboard.currentWeatherAvailable")
+                  : t("dashboard.weatherNotAvailable")}
               </p>
             </div>
 
@@ -1332,9 +1330,9 @@ const Dashboard = () => {
               <div className="db3-card-heading">
                 <div>
                   <span className="db3-card-kicker">
-                    MARKET
+                    {t("dashboard.marketSection")}
                   </span>
-                  <h2>Crop price signal</h2>
+                  <h2>{t("dashboard.cropPriceSignal")}</h2>
                 </div>
 
                 <ShoppingBag size={19} />
@@ -1349,8 +1347,8 @@ const Dashboard = () => {
 
                 <span>
                   {latestModalPrice != null
-                    ? "Latest modal price"
-                    : "No current price available"}
+                    ? t("dashboard.latestModalPrice")
+                    : t("dashboard.noCurrentPrice")}
                 </span>
               </div>
 
@@ -1363,8 +1361,8 @@ const Dashboard = () => {
 
                 <span>
                   {latestModalPrice != null
-                    ? "Latest modal price"
-                    : "No current price available"}
+                    ? t("dashboard.latestModalPrice")
+                    : t("dashboard.noCurrentPrice")}
                 </span>
               </div>
 
@@ -1376,7 +1374,7 @@ const Dashboard = () => {
                 }
                 className="db3-text-link"
               >
-                View market
+                {t("dashboard.viewMarket")}
                 <ArrowRight size={14} />
               </Link>
             </div>
@@ -1387,22 +1385,20 @@ const Dashboard = () => {
               </div>
 
               <span className="db3-card-kicker">
-                KRISHISPHERE AI
+                {t("dashboard.krishisphereAi")}
               </span>
 
-              <h2>Need help deciding the next action?</h2>
+              <h2> {t("dashboard.needHelpDeciding")}</h2>
 
               <p>
-                Ask questions using your field, soil,
-                crop stage and current conditions as
-                context.
+                 {t("dashboard.aiContextDescription")}
               </p>
 
               <Link
                 to="/ai-advice"
                 className="db3-text-link"
               >
-                Open AI Advice
+                 {t("dashboard.openAiAdvice")}
                 <ArrowRight size={14} />
               </Link>
             </div>
@@ -1411,17 +1407,15 @@ const Dashboard = () => {
           <section className="db3-support">
             <div className="db3-support-heading">
               <span className="db3-card-kicker">
-                SUPPORT & RESOURCES
+                 {t("dashboard.supportResources")}
               </span>
 
               <h2>
-                Need more help?
+                <h2>{t("dashboard.needMoreHelp")}</h2>
               </h2>
 
               <p>
-                Use KrishiSphere's guidance and official
-                scheme resources whenever you need
-                additional information.
+                {t("dashboard.supportDescription")}
               </p>
             </div>
 
@@ -1436,12 +1430,11 @@ const Dashboard = () => {
 
                 <div>
                   <strong>
-                    Farmer Guidance
+                    {t("dashboard.farmerGuidance")}
                   </strong>
 
                   <span>
-                    Understand the KrishiSphere workflow
-                    and available tools.
+                    {t("dashboard.farmerGuidanceDescription")}
                   </span>
                 </div>
 
@@ -1458,12 +1451,11 @@ const Dashboard = () => {
 
                 <div>
                   <strong>
-                    Government Schemes
+                    {t("dashboard.governmentSchemes")}
                   </strong>
 
                   <span>
-                    Explore scheme information and
-                    official government portals.
+                    {t("dashboard.governmentSchemesDescription")}
                   </span>
                 </div>
 
@@ -1475,37 +1467,48 @@ const Dashboard = () => {
           <section className="db3-bottom">
             <div>
               <span className="db3-card-kicker">
-                FARM SNAPSHOT
+                {t("dashboard.farmSnapshot")}
               </span>
 
               <h2>
                 {currentCycle
-                  ? `${crop?.name || "Your crop"} is ${
-                      isCompleted ? "complete" : "moving"
-                    }.`
-                  : "Your field is ready for planning."}
+                  ? isCompleted
+                    ? t("dashboard.snapshotCompletedCrop", {
+                        cropName: crop?.name || t("dashboard.yourCrop"),
+                      })
+                    : t("dashboard.snapshotCropInProgress", {
+                        cropName: crop?.name || t("dashboard.yourCrop"),
+                      })
+                  : t("dashboard.snapshotFieldReady")}
               </h2>
 
               <p>
-                {currentCycle
-                  ? `${completedTaskCount} of ${tasks.length} cycle tasks completed${
-                      nextStage?.name
-                        ? ` · next stage: ${nextStage.name}`
-                        : ""
-                    }.`
-                  : "The next useful action is to complete the field setup and crop selection."}
+                {currentCycle ? (
+                  <>
+                    {t("dashboard.snapshotTasksCompleted", {
+                      completed: completedTaskCount,
+                      total: tasks.length,
+                    })}
+                    {nextStage?.name
+                      ? ` · ${t("dashboard.nextStage")}: ${nextStage.name}`
+                      : ""}
+                    .
+                  </>
+                ) : (
+                  t("dashboard.snapshotPlanningHint")
+                )}
               </p>
             </div>
 
             <div className="db3-quick-actions">
               <Link to={fieldPath}>
                 <MapPin size={15} />
-                Field
+                {t("dashboard.quickField")}
               </Link>
 
               <Link to="/ai-advice">
                 <Sparkles size={15} />
-                AI Advice
+                {t("dashboard.quickAiAdvice")}
               </Link>
 
               <Link
@@ -1516,14 +1519,14 @@ const Dashboard = () => {
                 }
               >
                 <Sun size={15} />
-                Market
+                {t("dashboard.quickMarket")}
               </Link>
             </div>
           </section>
 
           {fieldLoading && (
             <div className="db3-refreshing">
-              Updating field information…
+              {t("dashboard.updatingFieldInformation")}
             </div>
           )}
         </>
