@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   AlertCircle,
@@ -121,40 +122,34 @@ const formatAIResponse = (text) => {
 
 
 const suggestedQuestions = [
-  "What should I focus on during the current stage?",
-  "What problems should I watch for right now?",
-  "How can I maintain healthy crop growth?",
-  "What should I check in my soil at this stage?",
+  "ai.suggestedQuestionStage",
+  "ai.suggestedQuestionProblems",
+  "ai.suggestedQuestionGrowth",
+  "ai.suggestedQuestionSoil",
 ];
 
 
 
 const AIAdvice = () => {
+
+  const { t, i18n } = useTranslation();
   const [cycleOptions, setCycleOptions] = useState([]);
 
-  const [selectedCycleId, setSelectedCycleId] =
-    useState("");
+  const [selectedCycleId, setSelectedCycleId] = useState("");
 
-  const [dashboard, setDashboard] =
-    useState(null);
+  const [dashboard, setDashboard] = useState(null);
 
-  const [question, setQuestion] =
-    useState("");
+  const [question, setQuestion] = useState("");
 
-  const [advice, setAdvice] =
-    useState("");
+  const [advice, setAdvice] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [dashboardLoading, setDashboardLoading] =
-    useState(false);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
 
-  const [adviceLoading, setAdviceLoading] =
-    useState(false);
+  const [adviceLoading, setAdviceLoading] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
 
 
@@ -257,10 +252,7 @@ const AIAdvice = () => {
         err
       );
 
-      setError(
-        err.message ||
-          "Unable to load your crop cycles."
-      );
+      setError("ai.errorLoadCycles");
     } finally {
       setLoading(false);
     }
@@ -305,10 +297,7 @@ const AIAdvice = () => {
 
       setDashboard(null);
 
-      setError(
-        err.message ||
-          "Unable to load crop context."
-      );
+      setError("ai.errorLoadContext");
     } finally {
       setDashboardLoading(false);
     }
@@ -351,14 +340,17 @@ const AIAdvice = () => {
       setError("");
       setAdvice("");
 
-      const data =
-        await api.post(
-          `/crop-cycles/${selectedCycleId}/advice`,
-          {
-            question:
-              trimmedQuestion,
-          }
-        );
+      const activeLanguage = i18n.resolvedLanguage || i18n.language || "en";
+
+      const data = await api.post(
+        `/crop-cycles/${selectedCycleId}/advice`,
+        {
+          question: trimmedQuestion,
+          language: activeLanguage.startsWith("hi")
+            ? "hi"
+            : "en",
+        }
+      );
 
       setAdvice(
         formatAIResponse(
@@ -372,10 +364,7 @@ const AIAdvice = () => {
         err
       );
 
-      setError(
-        err.message ||
-          "Unable to get AI advice."
-      );
+      setError("ai.errorGenerateAdvice");
     } finally {
       setAdviceLoading(false);
     }
@@ -393,14 +382,9 @@ const AIAdvice = () => {
             className="spin"
           />
 
-          <h2>
-            Preparing KrishiSphere AI
-          </h2>
+          <h2>{t("ai.preparing")}</h2>
 
-          <p>
-            Loading your fields
-            and crop cycles...
-          </p>
+          <p>{t("ai.loadingFieldsAndCycles")}</p>
 
         </div>
 
@@ -419,20 +403,13 @@ const AIAdvice = () => {
 
             <Sparkles size={15} />
 
-            KRISHISPHERE AI
+            {t("ai.title").toUpperCase()}
 
           </div>
 
-          <h1>
-            Ask about your crop
-          </h1>
+          <h1>{t("ai.askAboutCrop")}</h1>
 
-          <p>
-            Get context-aware guidance
-            using your crop stage,
-            soil and current field
-            conditions.
-          </p>
+          <p>{t("ai.pageDescription")}</p>
 
         </div>
 
@@ -450,7 +427,7 @@ const AIAdvice = () => {
           <AlertCircle size={18} />
 
           <span>
-            {error}
+            {error ? t(error) : ""}
           </span>
 
           <button
@@ -458,7 +435,7 @@ const AIAdvice = () => {
             onClick={loadData}
           >
             <RefreshCw size={15} />
-            Retry
+            {t("common.retry")}
           </button>
 
         </div>
@@ -474,16 +451,9 @@ const AIAdvice = () => {
 
           </div>
 
-          <h2>
-            No crop cycle available
-          </h2>
+          <h2>{t("ai.noCropCycleAvailable")}</h2>
 
-          <p>
-            Create a crop cycle first,
-            then you can ask
-            KrishiSphere AI questions
-            about it.
-          </p>
+          <p>{t("ai.createCropCycleFirst")}</p>
 
         </div>
       )}
@@ -504,12 +474,11 @@ const AIAdvice = () => {
               <div>
 
                 <span>
-                  SELECT CROP CYCLE
+                  {t("ai.selectCropCycle")}
                 </span>
 
                 <h2>
-                  Which crop would you
-                  like help with?
+                  {t("ai.whichCropHelp")}
                 </h2>
 
               </div>
@@ -541,11 +510,11 @@ const AIAdvice = () => {
                     const cycleCrop =
                       cycle?.cropId?.name ||
                       cycle?.crop?.name ||
-                      "Crop";
+                      t("ai.cropLabel");
 
                     const fieldName =
                       cycle?.__field?.name ||
-                      "Field";
+                     t("ai.fieldLabel");
 
                     return (
                       <option
@@ -584,7 +553,7 @@ const AIAdvice = () => {
                 className="spin"
               />
 
-              Loading crop context...
+             {t("ai.loadingCropContext")}
 
             </div>
 
@@ -607,7 +576,7 @@ const AIAdvice = () => {
                   <div>
 
                     <span>
-                      Crop
+                      {t("ai.cropLabel")}
                     </span>
 
                     <strong>
@@ -618,7 +587,7 @@ const AIAdvice = () => {
                     <small>
                       {dashboard.currentStage
                         ?.name ||
-                        "Current stage unavailable"}
+                        t("ai.currentStageUnavailable")}
                     </small>
 
                   </div>
@@ -638,7 +607,7 @@ const AIAdvice = () => {
                   <div>
 
                     <span>
-                      Field
+                      {t("ai.fieldLabel")}
                     </span>
 
                     <strong>
@@ -658,7 +627,7 @@ const AIAdvice = () => {
                       ]
                         .filter(Boolean)
                         .join(", ") ||
-                        "Location unavailable"}
+                        t("ai.locationUnavailable")}
                     </small>
 
                   </div>
@@ -680,7 +649,7 @@ const AIAdvice = () => {
                   <div>
 
                     <span>
-                      Weather
+                      {t("ai.weatherLabel")}
                     </span>
 
                     <strong>
@@ -691,10 +660,8 @@ const AIAdvice = () => {
                     </strong>
 
                     <small>
-                      {dashboard.weather
-                        ?.humidity ??
-                        "—"}
-                      % humidity
+                      {dashboard.weather?.humidity ?? "—"}%{" "}
+                      {t("ai.humidityLabel")}
                     </small>
 
                   </div>
@@ -716,7 +683,7 @@ const AIAdvice = () => {
                   <div>
 
                     <span>
-                      Soil pH
+                      {t("ai.soilPhLabel")}
                     </span>
 
                     <strong>
@@ -726,11 +693,8 @@ const AIAdvice = () => {
                     </strong>
 
                     <small>
-                      Moisture{" "}
-                      {dashboard.soilTest
-                        ?.moisture ??
-                        "—"}
-                      %
+                      {t("ai.moistureLabel")}{" "}
+                      {dashboard.soilTest?.moisture ?? "—"}%
                     </small>
 
                   </div>
@@ -747,27 +711,18 @@ const AIAdvice = () => {
                   <div>
 
                     <div className="ai-advice-main-label">
-
                       <Sparkles
                         size={15}
                       />
-
-                      CONTEXT-AWARE
-                      ASSISTANT
-
+                      {t("ai.contextAwareAssistant")}
                     </div>
 
                     <h2>
-                      What would you
-                      like to know?
+                      {t("ai.whatWouldYouLikeToKnow")}
                     </h2>
 
                     <p>
-                      Your question will
-                      be answered using
-                      the selected crop
-                      cycle's available
-                      context.
+                      {t("ai.questionContextDescription")}
                     </p>
 
                   </div>
@@ -781,7 +736,7 @@ const AIAdvice = () => {
                       {dashboard
                         .currentStage
                         ?.name ||
-                        "Current stage"}
+                        t("ai.currentStage")}
                     </span>
 
                   </div>
@@ -790,23 +745,19 @@ const AIAdvice = () => {
 
 
                 <div className="ai-question-suggestions">
+                  {suggestedQuestions.map((key) => {
+                    const item = t(key);
 
-                  {suggestedQuestions.map(
-                    (item) => (
+                    return (
                       <button
-                        key={item}
+                        key={key}
                         type="button"
-                        onClick={() =>
-                          setQuestion(
-                            item
-                          )
-                        }
+                        onClick={() => setQuestion(item)}
                       >
                         {item}
                       </button>
-                    )
-                  )}
-
+                    );
+                  })}
                 </div>
 
 
@@ -829,7 +780,7 @@ const AIAdvice = () => {
                           event.target.value
                         )
                       }
-                      placeholder="Ask something about your crop..."
+                      placeholder={t("ai.questionPlaceholder")}
                     />
 
                   </div>
@@ -849,14 +800,13 @@ const AIAdvice = () => {
                           size={17}
                           className="spin"
                         />
-
-                        Thinking...
+                        {t("ai.thinking")}
                       </>
                     ) : (
                       <>
                         <Send size={16} />
 
-                        Ask AI
+                        {t("ai.ask")}
                       </>
                     )}
 
@@ -885,8 +835,7 @@ const AIAdvice = () => {
                         </strong>
 
                         <span>
-                          Based on your crop
-                          context
+                          {t("ai.basedOnCropContext")}
                         </span>
 
                       </div>
@@ -908,15 +857,9 @@ const AIAdvice = () => {
                 <div className="ai-conditions-heading">
 
                   <div>
+                    <span>{t("ai.fieldContext")}</span>
 
-                    <span>
-                      FIELD CONTEXT
-                    </span>
-
-                    <h3>
-                      Current conditions
-                      used by AI
-                    </h3>
+                    <h3>{t("ai.currentConditionsUsedByAI")}</h3>
 
                   </div>
 
@@ -932,9 +875,7 @@ const AIAdvice = () => {
                       size={18}
                     />
 
-                    <span>
-                      Rainfall
-                    </span>
+                    <span>{t("ai.rainfallLabel")}</span>
 
                     <strong>
                       {dashboard.weather
@@ -953,9 +894,7 @@ const AIAdvice = () => {
                       size={18}
                     />
 
-                    <span>
-                      Temperature
-                    </span>
+                     <span>{t("ai.temperatureLabel")}</span>
 
                     <strong>
                       {dashboard.weather
@@ -974,9 +913,7 @@ const AIAdvice = () => {
                       size={18}
                     />
 
-                    <span>
-                      Humidity
-                    </span>
+                    <span>{t("ai.humidityLabel")}</span>
 
                     <strong>
                       {dashboard.weather
@@ -995,9 +932,7 @@ const AIAdvice = () => {
                       size={18}
                     />
 
-                    <span>
-                      Crop stage
-                    </span>
+                     <span>{t("ai.cropStageLabel")}</span>
 
                     <strong>
                       {dashboard.currentStage
@@ -1013,14 +948,7 @@ const AIAdvice = () => {
 
 
               <p className="ai-advice-note">
-                AI-generated guidance is
-                intended to support farm
-                decisions. For exact
-                fertilizer quantities or
-                treatment decisions, use
-                validated agronomic
-                recommendations and
-                product labels.
+                {t("ai.safetyNote")}
               </p>
 
             </>
@@ -1031,10 +959,7 @@ const AIAdvice = () => {
 
               <Leaf size={22} />
 
-              <p>
-                Select a crop cycle to
-                load its context.
-              </p>
+              <p>{t("ai.selectCycleToLoadContext")}</p>
 
             </div>
 

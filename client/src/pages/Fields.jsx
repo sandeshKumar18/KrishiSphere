@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { api } from "../lib/api";
@@ -52,6 +53,7 @@ const normalizeFields = (data) => {
 };
 
 const Fields = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [fields, setFields] = useState([]);
@@ -98,10 +100,7 @@ const Fields = () => {
         err
       );
 
-      setError(
-        err.message ||
-          "Failed to load fields."
-      );
+      setError("fields.errorLoadFields");
     } finally {
       setLoading(false);
     }
@@ -247,10 +246,7 @@ const Fields = () => {
 
     await loadFields();
   } catch (err) {
-    console.error(
-      "Save field error:",
-      err
-    );
+    setError("fields.errorSaveField");
 
     setError(
       err.message ||
@@ -316,15 +312,22 @@ const Fields = () => {
         area;
     });
 
-    const areaSummary =
-      Object.entries(unitTotals)
-        .map(
-          ([unit, total]) =>
-            `${total.toFixed(2)} ${unit}${
-              total !== 1 ? "s" : ""
-            }`
-        )
-        .join(" · ");
+    const areaSummary = Object.entries(unitTotals)
+      .map(([unit, total]) => {
+        const unitNameKeys = {
+          acre: total === 1 ? "acreSingular" : "acrePlural",
+          hectare: total === 1 ? "hectareSingular" : "hectarePlural",
+          bigha: total === 1 ? "bighaSingular" : "bighaPlural",
+        };
+
+        const unitKey = unitNameKeys[unit];
+        const unitLabel = unitKey
+          ? t(`fields.${unitKey}`)
+          : `${unit}${total !== 1 ? "s" : ""}`;
+
+        return `${total.toFixed(2)} ${unitLabel}`;
+      })
+      .join(" · ");
 
     const districts =
       new Set(
@@ -345,7 +348,7 @@ const Fields = () => {
         areaSummary || "—",
       districts: districts.size,
     };
-  }, [fields]);
+  }, [fields,t]);
 
 
   const openField = (field) => {
@@ -420,10 +423,7 @@ const Fields = () => {
       err
     );
 
-    setError(
-      err.message ||
-        "Unable to delete this field."
-    );
+    setError("fields.errorDeleteField");
   } finally {
     setDeleteCheckingFieldId(null);
     setDeletingFieldId(null);
@@ -467,10 +467,7 @@ const confirmDeleteField = async () => {
       err
     );
 
-    setError(
-      err.message ||
-        "Unable to delete this field."
-    );
+    setError("fields.errorDeleteField");
   } finally {
     setDeletingFieldId(null);
   }
@@ -511,19 +508,14 @@ const confirmDeleteField = async () => {
         <div>
           <div className="fields-eyebrow">
             <Leaf size={14} />
-            FARM MANAGEMENT
+            {t("fields.farmManagement")}
           </div>
 
           <h1>
-            My Fields
+             {t("fields.title")}
           </h1>
 
-          <p>
-            Manage your farmland and keep
-            each field ready for soil
-            testing, crop planning and
-            farm decisions.
-          </p>
+          <p>{t("fields.headerDescription")}</p>
         </div>
 
         <button
@@ -538,12 +530,12 @@ const confirmDeleteField = async () => {
           {showAddForm ? (
             <>
               <X size={17} />
-              Close
+              {t("common.close")}
             </>
           ) : (
             <>
               <Plus size={17} />
-              Add Field
+              {t("fields.addField")}
             </>
           )}
         </button>
@@ -563,7 +555,7 @@ const confirmDeleteField = async () => {
               Something went wrong
             </strong>
 
-            <p>{error}</p>
+            <p>{error ? t(error) : ""}</p>
           </div>
 
           <button
@@ -584,20 +576,20 @@ const confirmDeleteField = async () => {
             <div>
               <span>
                 {isEditing
-                  ? "EDIT FIELD"
-                  : "NEW FIELD"}
+                    ? t("fields.editField")
+                    : t("fields.newField")}
               </span>
 
               <h2>
                 {isEditing
-                  ? "Update your field"
-                  : "Add your farmland"}
+                   ? t("fields.updateYourField")
+                   : t("fields.addYourFarmland")}
               </h2>
 
               <p>
                 {isEditing
-                  ? "Update the basic information for this field."
-                  : "Enter the basic details of this field. You can add soil test information later."}
+                  ? t("fields.editDescription")
+                  : t("fields.addDescription")}
               </p>
 
               <p>
@@ -621,7 +613,7 @@ const confirmDeleteField = async () => {
 
             <div className="field-form-group full">
               <label htmlFor="name">
-                Field name
+               {t("fields.fieldName")}
               </label>
 
               <input
@@ -630,7 +622,7 @@ const confirmDeleteField = async () => {
                 type="text"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="e.g. North Farm"
+                placeholder={t("fields.fieldNamePlaceholder")}
                 required
               />
             </div>
@@ -638,7 +630,7 @@ const confirmDeleteField = async () => {
 
             <div className="field-form-group">
               <label htmlFor="area">
-                Area
+                 {t("fields.area")}
               </label>
 
               <div className="field-input-row">
@@ -651,7 +643,7 @@ const confirmDeleteField = async () => {
                   step="0.01"
                   value={form.area}
                   onChange={handleChange}
-                  placeholder="2.5"
+                  placeholder={t("fields.areaPlaceholder")}
                   required
                 />
 
@@ -661,15 +653,15 @@ const confirmDeleteField = async () => {
                   onChange={handleChange}
                 >
                   <option value="acre">
-                    Acre
+                    {t("fields.acre")}
                   </option>
 
                   <option value="hectare">
-                    Hectare
+                    {t("fields.hectare")}
                   </option>
 
                   <option value="bigha">
-                    Bigha
+                    {t("fields.bigha")}
                   </option>
                 </select>
 
@@ -679,10 +671,8 @@ const confirmDeleteField = async () => {
 
             <div className="field-form-group">
               <label htmlFor="soilType">
-                Soil type
-                <span>
-                  Optional
-                </span>
+                {t("fields.soilType")}
+                <span>{t("fields.optional")}</span>
               </label>
 
               <input
@@ -691,14 +681,14 @@ const confirmDeleteField = async () => {
                 type="text"
                 value={form.soilType}
                 onChange={handleChange}
-                placeholder="Loamy, Sandy, Clay..."
+                placeholder={t("fields.soilTypePlaceholder")}
               />
             </div>
 
 
             <div className="field-form-group">
               <label htmlFor="state">
-                State
+                {t("fields.state")}
               </label>
 
               <input
@@ -707,7 +697,7 @@ const confirmDeleteField = async () => {
                 type="text"
                 value={form.state}
                 onChange={handleChange}
-                placeholder="Uttar Pradesh"
+                 placeholder={t("fields.statePlaceholder")}
                 required
               />
             </div>
@@ -715,7 +705,7 @@ const confirmDeleteField = async () => {
 
             <div className="field-form-group">
               <label htmlFor="district">
-                District
+                {t("fields.district")}
               </label>
 
               <input
@@ -724,7 +714,7 @@ const confirmDeleteField = async () => {
                 type="text"
                 value={form.district}
                 onChange={handleChange}
-                placeholder="Moradabad"
+                placeholder={t("fields.districtPlaceholder")}
                 required
               />
             </div>
@@ -738,7 +728,7 @@ const confirmDeleteField = async () => {
                 onClick={handleCloseForm}
                 disabled={submitting}
               >
-                Cancel
+                {t("common.cancel")}
               </button>
 
              <button
@@ -748,11 +738,11 @@ const confirmDeleteField = async () => {
               >
                 {submitting
                   ? isEditing
-                    ? "Saving changes..."
-                    : "Adding field..."
+                    ? t("fields.savingChanges")
+                    : t("fields.addingField")
                   : isEditing
-                  ? "Save Changes"
-                  : "Add Field"}
+                    ? t("fields.saveChanges")
+                    : t("fields.addField")}
               </button>
 
             </div>
@@ -771,9 +761,7 @@ const confirmDeleteField = async () => {
           </div>
 
           <div>
-            <span>
-              Total fields
-            </span>
+            <span>{t("fields.totalFields")}</span>
 
             <strong>
               {stats.totalFields}
@@ -790,9 +778,7 @@ const confirmDeleteField = async () => {
           </div>
 
           <div>
-            <span>
-              Total area
-            </span>
+            <span>{t("fields.totalArea")}</span>
 
             <strong className="area-value">
               {stats.areaSummary}
@@ -809,9 +795,7 @@ const confirmDeleteField = async () => {
           </div>
 
           <div>
-            <span>
-              Districts covered
-            </span>
+            <span>{t("fields.districtsCovered")}</span>
 
             <strong>
               {stats.districts}
@@ -829,11 +813,11 @@ const confirmDeleteField = async () => {
 
           <div>
             <span>
-              YOUR FARMLAND
+              {t("fields.yourFarmland")}
             </span>
 
             <h2>
-              All fields
+               {t("fields.allFields")}
             </h2>
           </div>
 
@@ -851,7 +835,7 @@ const confirmDeleteField = async () => {
                     event.target.value
                   )
                 }
-                placeholder="Search fields..."
+                placeholder={t("fields.searchPlaceholder")}
               />
 
               {search && (
@@ -860,7 +844,7 @@ const confirmDeleteField = async () => {
                   onClick={() =>
                     setSearch("")
                   }
-                  aria-label="Clear search"
+                  aria-label={t("fields.clearSearch")}
                 >
                   <X size={14} />
                 </button>
@@ -878,16 +862,9 @@ const confirmDeleteField = async () => {
               <Leaf size={24} />
             </div>
 
-            <h3>
-              No fields added yet
-            </h3>
+            <h3>{t("fields.noFieldsYet")}</h3>
 
-            <p>
-              Add your first field to start
-              recording soil data, getting
-              crop recommendations and
-              managing crop cycles.
-            </p>
+            <p>{t("fields.emptyDescription")}</p>
 
             <button
               type="button"
@@ -897,7 +874,7 @@ const confirmDeleteField = async () => {
               className="fields-empty-button"
             >
               <Plus size={16} />
-              Add your first field
+              {t("fields.addFirstField")}
             </button>
 
           </div>
@@ -908,14 +885,9 @@ const confirmDeleteField = async () => {
               <Search size={22} />
             </div>
 
-            <h3>
-              No matching fields
-            </h3>
+            <h3>{t("fields.noMatchingFields")}</h3>
 
-            <p>
-              Try another field name,
-              district or soil type.
-            </p>
+            <p>{t("fields.noSearchResults")}</p>
 
           </div>
         ) : (
@@ -961,8 +933,7 @@ const confirmDeleteField = async () => {
 
                       <div className="field-item-location">
                         <MapPin size={13} />
-                        {location ||
-                          "Location not set"}
+                        {location || t("fields.locationNotSet")}
                       </div>
 
                       <div className="field-item-meta">
@@ -986,8 +957,7 @@ const confirmDeleteField = async () => {
                           </span>
 
                           <strong>
-                            {field.soilType ||
-                              "Not specified"}
+                            {field.soilType || t("fields.notSpecified")}
                           </strong>
                         </div>
 
@@ -1073,9 +1043,7 @@ const confirmDeleteField = async () => {
           <Leaf size={15} />
 
           <span>
-            Select a field to manage its
-            soil tests, crop recommendations
-            and crop cycles.
+            {t("fields.fieldNote")}
           </span>
         </div>
       )}
@@ -1101,25 +1069,21 @@ const confirmDeleteField = async () => {
       </div>
 
       <div className="field-delete-content">
-        <h3>
-          This field contains existing data
-        </h3>
+        <h3>{t("fields.deleteModalTitle")}</h3>
 
         <p>
           <strong>
             {deleteCandidate.field?.name ||
-              "This field"}
+              t("fields.thisField")}
           </strong>{" "}
-          has data associated with it. Deleting
-          the field will permanently remove this
-          related information.
+          {t("fields.deleteDescription")}
         </p>
 
         <div className="field-delete-data">
           {deleteCandidate.dependencies
             ?.soilTests > 0 && (
             <div className="field-delete-row">
-              <span>Soil tests</span>
+              <span>{t("fields.soilTests")}</span>
               <strong>
                 {
                   deleteCandidate
@@ -1133,7 +1097,7 @@ const confirmDeleteField = async () => {
           {deleteCandidate.dependencies
             ?.recommendations > 0 && (
             <div className="field-delete-row">
-              <span>Recommendations</span>
+              <span>{t("fields.recommendations")}</span>
               <strong>
                 {
                   deleteCandidate
@@ -1147,7 +1111,7 @@ const confirmDeleteField = async () => {
           {deleteCandidate.dependencies
             ?.cropCycles > 0 && (
             <div className="field-delete-row">
-              <span>Crop cycles</span>
+              <span>{t("fields.cropCycles")}</span>
               <strong>
                 {
                   deleteCandidate
@@ -1160,7 +1124,7 @@ const confirmDeleteField = async () => {
         </div>
 
         <div className="field-delete-warning">
-          This action cannot be undone.
+          {t("fields.deleteWarning")}
         </div>
       </div>
 
@@ -1175,7 +1139,7 @@ const confirmDeleteField = async () => {
             setDeleteCandidate(null)
           }
         >
-          Cancel
+          {t("common.cancel")}
         </button>
 
         <button
@@ -1189,8 +1153,8 @@ const confirmDeleteField = async () => {
           <Trash2 size={16} />
 
           {deletingFieldId
-            ? "Deleting..."
-            : "Delete Field & Data"}
+            ? t("fields.deleting")
+            : t("fields.deleteFieldAndData")}
         </button>
       </div>
     </div>

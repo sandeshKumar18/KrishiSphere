@@ -45,10 +45,12 @@ IMPORTANT RULES:
 - Keep the response concise and practical.
 - Avoid repeating the farm context unnecessarily.
 
-ALWAYS use exactly this structure:
+ALWAYS use exactly these five sections in this order.
+
+When responding in English, use these headings:
 
 Summary:
-2 to 3 short sentences explaining the current situation and the main point.
+- Explain the current situation in 2 to 3 short sentences.
 
 What to do now:
 - Give 3 to 5 practical actions.
@@ -64,7 +66,32 @@ When to take action:
 Important note:
 - Mention limitations, missing information, or when local agricultural verification is appropriate.
 
-Use plain language suitable for a farmer.
+When responding in Hindi, use these equivalent headings:
+
+सारांश:
+- वर्तमान स्थिति और मुख्य बात 2 से 3 छोटे वाक्यों में समझाएँ।
+
+अभी क्या करें:
+- 3 से 5 व्यावहारिक सुझाव दें।
+- प्रत्येक सुझाव को सरल और स्पष्ट रखें।
+
+किन बातों पर नज़र रखें:
+- उन महत्वपूर्ण बातों को बताएँ जिन्हें किसान को देखना या जाँचना चाहिए।
+
+कब कार्रवाई करें:
+- बताएँ कि किन परिस्थितियों या संकेतों पर अगला कदम उठाना चाहिए।
+- बिना विश्वसनीय आधार के संख्यात्मक सीमाएँ न बताएँ।
+
+महत्वपूर्ण बात:
+- सीमाओं, अनुपलब्ध जानकारी या स्थानीय कृषि विशेषज्ञ से सलाह लेने की आवश्यकता बताएँ।
+
+LANGUAGE RULES:
+- Follow the response language specified in the request.
+- In Hindi mode, write all explanations in simple, natural Hindi using Devanagari script.
+- In English mode, write all explanations in clear, simple English.
+- Keep crop names, scientific names, units, and technical terms where appropriate.
+- Do not mix English sentences into a Hindi response.
+- Use language that farmers with limited technical knowledge can understand.
 `;
 
 /* gov. Scheme */
@@ -173,44 +200,51 @@ const runGemini = async (
 };
 
 
-export const generateCropAdvice = async (
-  context,
-  question
-) => {
+export const generateCropAdvice = async ( context,question,language = "en") => {
+  const responseLanguage = language === "hi" ? "hi" : "en";
+
+  const languageInstruction =
+    responseLanguage === "hi"
+      ? `
+RESPONSE LANGUAGE: Hindi.
+
+Respond entirely in simple, natural Hindi using Devanagari script.
+Use the five Hindi headings defined in the system instruction.
+Do not use the English headings.
+Keep the advice practical, respectful, and easy for farmers to understand.
+`
+      : `
+RESPONSE LANGUAGE: English.
+
+Respond entirely in clear, simple English.
+Use the five English headings defined in the system instruction.
+Keep the advice practical and easy for farmers to understand.
+`;
+
   const input = `
+${languageInstruction}
+
 FARM CONTEXT:
 ${JSON.stringify(context, null, 2)}
 
 FARMER QUESTION:
 ${question}
 
-Answer the farmer using the exact structure required by the system instruction:
+Follow the five-section response structure required by the system instruction.
 
-Summary:
-...
+Use only information supported by the supplied farm context or clearly
+identified general agricultural guidance.
 
-What to do now:
-- ...
-- ...
-- ...
+Do not invent numeric values, fertilizer or pesticide doses,
+measurements, diagnoses, or farm conditions.
 
-What to monitor:
-- ...
-- ...
-
-When to take action:
-- ...
-
-Important note:
-- ...
-
-Use only information supported by the supplied farm context or clearly identified general guidance.
-Do not invent numeric values, doses, measurements, or farm conditions.
+If important information is missing, clearly explain the limitation
+in the selected response language.
 `;
 
   return runGemini(
     CROP_SYSTEM_INSTRUCTION,
-    input
+    `${languageInstruction}\n\n${input}`
   );
 };
 

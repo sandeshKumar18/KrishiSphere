@@ -11,6 +11,8 @@ export const getCropAdvice = async (req, res) => {
     const { cropCycleId } = req.params;
     const { question } = req.body;
 
+    const language = req.body.language === "hi" ? "hi" : "en";
+
     if (!question || !question.trim()) {
       return res.status(400).json({
         message: "question is required",
@@ -100,11 +102,13 @@ export const getCropAdvice = async (req, res) => {
 
     const advice = await generateCropAdvice(
       context,
-      question
+      question,
+      language
     );
 
     return res.status(200).json({
       question,
+      language,
       context,
       advice,
     });
