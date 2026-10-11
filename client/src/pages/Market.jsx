@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
   CalendarDays,
@@ -171,8 +172,8 @@ const getArrivalDate = (record) =>
   ]);
 
 const Market = () => {
-  const [searchParams, setSearchParams] =
-    useSearchParams();
+  const [searchParams, setSearchParams] =  useSearchParams();
+  const { t } = useTranslation();
 
   const [fields, setFields] = useState([]);
   const [cycles, setCycles] = useState([]);
@@ -297,10 +298,7 @@ const Market = () => {
         err
       );
 
-      setError(
-        err.message ||
-          "Unable to load your crop cycles."
-      );
+      setError("market.errorLoadCycles");
     } finally {
       setLoading(false);
     }
@@ -331,10 +329,7 @@ const Market = () => {
 
       setMarket(null);
 
-      setError(
-        err.message ||
-          "Unable to load current market prices."
-      );
+      setError("market.errorLoadPrices");
     } finally {
       setMarketLoading(false);
     }
@@ -463,12 +458,9 @@ const Market = () => {
             className="market-spin"
           />
 
-          <h2>Preparing market data</h2>
+          <h2>{t("market.loadingTitle")}</h2>
 
-          <p>
-            Loading your crop cycles and
-            market information...
-          </p>
+          <p>{t("market.loadingDescription")}</p>
         </div>
       </div>
     );
@@ -480,15 +472,12 @@ const Market = () => {
         <div>
           <span className="market-kicker">
             <TrendingUp size={14} />
-            MARKET INTELLIGENCE
+            {t("market.intelligence").toUpperCase()}
           </span>
 
-          <h1>Crop Market Prices</h1>
+          <h1>{t("market.title")}</h1>
 
-          <p>
-            View recent mandi prices for the
-            crop you are currently growing.
-          </p>
+          <p>{t("market.description")}</p>
         </div>
 
         <button
@@ -509,7 +498,7 @@ const Market = () => {
             }
           />
 
-          Refresh
+          {t("market.refresh")}
         </button>
       </section>
 
@@ -517,10 +506,10 @@ const Market = () => {
         <div className="market-error">
           <div>
             <strong>
-              Market data could not be loaded
+              {t("market.errorTitle")}
             </strong>
 
-            <span>{error}</span>
+            <span>{error ? t(error) : ""}</span>
           </div>
 
           <button
@@ -536,7 +525,7 @@ const Market = () => {
             }}
           >
             <RefreshCw size={15} />
-            Retry
+            {t("common.retry")}
           </button>
         </div>
       )}
@@ -547,12 +536,9 @@ const Market = () => {
             <Store size={27} />
           </div>
 
-          <h2>No crop cycle available</h2>
+          <h2>{t("market.noCropCycle")}</h2>
 
-          <p>
-            Start a crop cycle from one of your
-            fields to view relevant market prices.
-          </p>
+          <p>{t("market.noCropCycleDescription")}</p>
         </section>
       ) : (
         <>
@@ -564,14 +550,14 @@ const Market = () => {
 
               <div>
                 <span>
-                  MARKET FOR CROP CYCLE
+                  {t("market.marketForCropCycle").toUpperCase()}
                 </span>
 
                 <h2>{selectedCrop}</h2>
 
                 <p>
                   {selectedField?.name ||
-                    "Selected field"}
+                    t("market.selectedField")}
                   {locationText
                     ? ` • ${locationText}`
                     : ""}
@@ -581,7 +567,7 @@ const Market = () => {
 
             <div className="market-selector">
               <label htmlFor="market-cycle">
-                Crop cycle
+                  {t("market.cropCycle")}
               </label>
 
               <div className="market-select-wrap">
@@ -599,20 +585,21 @@ const Market = () => {
                     const cropName =
                       cycle?.cropId?.name ||
                       cycle?.crop?.name ||
-                      "Crop";
+                      t("market.crop");
 
                     const fieldName =
                       cycle?.__field?.name ||
-                      "Field";
+                      t("market.field");
 
-                    const status =
-                      cycle?.status
-                        ?.replace("_", " ")
-                        ?.replace(
-                          /^\w/,
-                          (char) =>
-                            char.toUpperCase()
-                        ) || "";
+                    const statusKey = {
+                      active: "market.statusActive",
+                      planned: "market.statusPlanned",
+                      completed: "market.statusCompleted",
+                    }[cycle?.status];
+
+                    const status = statusKey
+                      ? t(statusKey)
+                      : "";
 
                     return (
                       <option
@@ -644,7 +631,7 @@ const Market = () => {
               />
 
               <span>
-                Fetching latest market prices...
+                {t("market.fetchingLatestPrices")}
               </span>
             </div>
           ) : (
@@ -652,7 +639,7 @@ const Market = () => {
               <section className="market-summary-grid">
                 <article className="market-summary-card">
                   <div className="market-summary-top">
-                    <span>Average Min</span>
+                    <span>{t("market.averageMin")}</span>
                   </div>
 
                   <strong>
@@ -661,14 +648,12 @@ const Market = () => {
                       : "—"}
                   </strong>
 
-                  <small>
-                    Across available markets
-                  </small>
+                  <small>{t("market.acrossAvailableMarkets")}</small>
                 </article>
 
                 <article className="market-summary-card">
                   <div className="market-summary-top">
-                    <span>Average Modal</span>
+                    <span>{t("market.averageModal")}</span>
                     <TrendingUp size={17} />
                   </div>
 
@@ -680,14 +665,12 @@ const Market = () => {
                       : "—"}
                   </strong>
 
-                  <small>
-                    Typical reported price
-                  </small>
+                  <small>{t("market.typicalReportedPrice")}</small>
                 </article>
 
                 <article className="market-summary-card">
                   <div className="market-summary-top">
-                    <span>Average Max</span>
+                    <span>{t("market.averageMax")}</span>
                   </div>
 
                   <strong>
@@ -696,9 +679,7 @@ const Market = () => {
                       : "—"}
                   </strong>
 
-                  <small>
-                    Across available markets
-                  </small>
+                  <small>{t("market.acrossAvailableMarkets")}</small>
                 </article>
               </section>
 
@@ -707,11 +688,11 @@ const Market = () => {
                   <div className="market-section-heading">
                     <div>
                       <span>
-                        MARKET RECORDS
+                        {t("market.marketRecords").toUpperCase()}
                       </span>
 
                       <h2>
-                        Recent mandi prices
+                        {t("market.recentMandiPrices")}
                       </h2>
                     </div>
 
@@ -790,9 +771,7 @@ const Market = () => {
 
                               <div className="market-price-grid">
                                 <div>
-                                  <span>
-                                    Min
-                                  </span>
+                                  <span>{t("market.minPrice")}</span>
 
                                   <strong>
                                     {formatPrice(
@@ -802,9 +781,7 @@ const Market = () => {
                                 </div>
 
                                 <div className="modal-price">
-                                  <span>
-                                    Modal
-                                  </span>
+                                  <span>{t("market.modalPrice")}</span>
 
                                   <strong>
                                     {formatPrice(
@@ -814,9 +791,7 @@ const Market = () => {
                                 </div>
 
                                 <div>
-                                  <span>
-                                    Max
-                                  </span>
+                                  <span>{t("market.maxPrice")}</span>
 
                                   <strong>
                                     {formatPrice(
@@ -838,7 +813,7 @@ const Market = () => {
                                 </span>
 
                                 <span>
-                                  ₹/quintal
+                                  {t("market.priceUnit")}
                                 </span>
                               </div>
                             </article>
@@ -851,13 +826,13 @@ const Market = () => {
                       <Store size={24} />
 
                       <h3>
-                        No market records found
+                        {t("market.noRecordsFound")}
                       </h3>
 
                       <p>
-                        There is currently no
-                        price data available for
-                        {` ${selectedCrop}`}.
+                        {t("market.noPriceData", {
+                          crop: selectedCrop,
+                        })}
                       </p>
                     </div>
                   )}
@@ -869,32 +844,28 @@ const Market = () => {
                   </div>
 
                   <span className="market-side-label">
-                    PRICE CONTEXT
+                    {t("market.priceContext").toUpperCase()}
                   </span>
 
                   <h2>
-                    {locationText ||
-                      "Your field location"}
+                    {locationText ||t("market.yourFieldLocation")}
                   </h2>
 
                   <p>
-                    Prices are fetched from the
-                    government market-data
-                    source available to
-                    KrishiSphere.
+                    {t("market.governmentDataDescription")}
                   </p>
 
                   <div className="market-side-divider" />
 
                   <div className="market-side-row">
-                    <span>Crop</span>
+                    <span>{t("market.cropLabel")}</span>
                     <strong>
                       {selectedCrop}
                     </strong>
                   </div>
 
                   <div className="market-side-row">
-                    <span>Markets found</span>
+                    <span>{t("market.marketsFound")}</span>
                     <strong>
                       {records.length}
                     </strong>
@@ -911,12 +882,7 @@ const Market = () => {
                   </div>
 
                   <p>
-                    Market prices are reference
-                    data and may vary by mandi,
-                    variety, quality, and trading
-                    date. Use them as a pricing
-                    signal rather than a guaranteed
-                    selling price.
+                    {t("market.priceDisclaimer")}
                   </p>
                 </div>
               )}

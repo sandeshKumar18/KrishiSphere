@@ -252,8 +252,36 @@ in the selected response language.
 export const generateSchemeAdvice = async (
   schemes,
   question,
-  conversationHistory = []
+  conversationHistory = [],
+  language = "en"
 ) => {
+  const responseLanguage =
+    language === "hi" ? "hi" : "en";
+
+  const languageInstruction =
+    responseLanguage === "hi"
+      ? `
+RESPONSE LANGUAGE: Hindi.
+
+- Respond in simple, natural Hindi using Devanagari script.
+- Explain government scheme information in language farmers can understand.
+- Keep official scheme names, department names, and technical terms
+  recognizable. Explain them in Hindi when helpful.
+- Do not mix English sentences into a Hindi response.
+- Preserve official portal URLs exactly as supplied.
+- If the question is unrelated to government schemes, politely explain
+  this limitation in Hindi.
+`
+      : `
+RESPONSE LANGUAGE: English.
+
+- Respond in clear, simple English suitable for farmers.
+- Keep official scheme names and technical terms recognizable.
+- Preserve official portal URLs exactly as supplied.
+- If the question is unrelated to government schemes, politely explain
+  this limitation in English.
+`;
+
   const historyText = conversationHistory.length
     ? conversationHistory
         .map((message) => {
@@ -286,6 +314,8 @@ export const generateSchemeAdvice = async (
   }));
 
   const input = `
+${languageInstruction}
+
 GOVERNMENT SCHEME CONTEXT:
 ${JSON.stringify(schemeContext, null, 2)}
 
@@ -295,25 +325,28 @@ ${historyText}
 CURRENT FARMER QUESTION:
 ${question}
 
-Answer naturally as a normal conversation.
+RESPONSE REQUIREMENTS:
 
-Use the supplied scheme context as the primary source.
-
-When the question refers to a specific scheme, use the relevant scheme
-information.
-
-When the question asks which scheme is relevant, identify the relevant
-scheme(s) and explain why based on the stored information.
-
-When comparing schemes, explain their differences without declaring one
-scheme as universally best.
-
-When an official portal is available, include it in the answer.
-
-If the supplied information is insufficient, say so clearly instead of
-inventing an answer.
-
-Do not claim that the farmer is definitely eligible.
+- Answer in the selected response language.
+- Use the supplied scheme context as the primary source.
+- Answer naturally and directly, considering the conversation history.
+- When the question refers to a specific scheme, use the relevant
+  information supplied for that scheme.
+- When asked which scheme may be relevant, identify relevant schemes
+  and explain why based on the available information.
+- When comparing schemes, explain their differences without declaring
+  one scheme universally best.
+- Include an official portal URL when one is available in the supplied
+  context. Never invent a URL.
+- Do not invent scheme names, benefits, eligibility rules, documents,
+  deadlines, subsidy amounts, application steps, or government policies.
+- Do not claim that a farmer is definitely eligible.
+- Explain that final eligibility and application decisions belong to
+  the relevant government authority where appropriate.
+- If the supplied information is insufficient, clearly explain what
+  information is unavailable instead of guessing.
+- Do not use tables or horizontal separators.
+- Keep the answer practical, respectful, and easy for farmers to understand.
 `;
 
   return runGemini(

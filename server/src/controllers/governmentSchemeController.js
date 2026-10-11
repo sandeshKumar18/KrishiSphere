@@ -101,7 +101,10 @@ export const askGovernmentSchemeAI = async (
     const {
       question,
       conversationHistory = [],
+      language = "en"
     } = req.body;
+
+    const responseLanguage = language === "hi" ? "hi" : "en";
 
     if (
       typeof question !== "string" ||
@@ -162,7 +165,8 @@ export const askGovernmentSchemeAI = async (
     const answer = await generateSchemeAdvice(
       schemes,
       question.trim(),
-      safeHistory
+      safeHistory,
+      responseLanguage
     );
 
     res.status(200).json({

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
   CalendarDays,
@@ -81,8 +82,24 @@ const getCropName = (cycle) =>
   cycle?.cropName ||
   "Crop";
 
-const getStatusLabel = (status) => {
-  if (!status) return "Planned";
+const getStatusLabel = (status, t) => {
+  if (!status) {
+    return t("cropCycles.planned");
+  }
+
+  const normalized = status
+    .toLowerCase()
+    .replace(/_/g, "");
+
+  const statusKeys = {
+    active: "cropCycles.active",
+    planned: "cropCycles.planned",
+    completed: "cropCycles.completed",
+  };
+
+  if (statusKeys[normalized]) {
+    return t(statusKeys[normalized]);
+  }
 
   return status
     .replace(/_/g, " ")
@@ -182,6 +199,7 @@ const getProgress = (cycle) => {
 };
 
 const CropCycles = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [cycles, setCycles] = useState([]);
@@ -249,10 +267,7 @@ const CropCycles = () => {
       err
     );
 
-    setError(
-      err.message ||
-        "Unable to load your crop cycles."
-    );
+    setError("cropCycles.errorLoadCycles");
   } finally {
     setLoading(false);
   }
@@ -333,12 +348,11 @@ const CropCycles = () => {
           />
 
           <h2>
-            Loading crop journeys
+            {t("cropCycles.loadingTitle")}
           </h2>
 
           <p>
-            Gathering your active and previous
-            crop cycles...
+            {t("cropCycles.loadingDescription")}
           </p>
         </div>
       </div>
@@ -352,27 +366,26 @@ const CropCycles = () => {
         <div>
           <span className="crop-cycles-kicker">
             <Leaf size={14} />
-            CROP MANAGEMENT
+            {t("cropCycles.management").toUpperCase()}
           </span>
 
-          <h1>Crop Cycles</h1>
+          <h1>{t("cropCycles.title")}</h1>
 
           <p>
-            Track every crop from planting through
-            its growth stages, tasks, and completion.
+            {t("cropCycles.description")}
           </p>
         </div>
       </section>
 
       {error && (
         <div className="crop-cycles-error">
-          <span>{error}</span>
+          <span>{error ? t(error) : ""}</span>
 
           <button
             type="button"
             onClick={loadCycles}
           >
-            Retry
+            {t("common.retry")}
           </button>
         </div>
       )}
@@ -380,27 +393,27 @@ const CropCycles = () => {
       <section className="crop-cycle-stat-grid">
 
         <div className="crop-cycle-stat">
-          <span>Total cycles</span>
+          <span>{t("cropCycles.totalCycles")}</span>
           <strong>{counts.all}</strong>
-          <small>All crop journeys</small>
+          <small>{t("cropCycles.allJourneys")}</small>
         </div>
 
         <div className="crop-cycle-stat active">
-          <span>Active</span>
+          <span>{t("cropCycles.active")}</span>
           <strong>{counts.active}</strong>
-          <small>Currently growing</small>
+          <small>{t("cropCycles.currentlyGrowing")}</small>
         </div>
 
         <div className="crop-cycle-stat planned">
-          <span>Planned</span>
+          <span>{t("cropCycles.planned")}</span>
           <strong>{counts.planned}</strong>
-          <small>Ready to begin</small>
+          <small>{t("cropCycles.readyToBegin")}</small>
         </div>
 
         <div className="crop-cycle-stat completed">
-          <span>Completed</span>
+          <span>{t("cropCycles.completed")}</span>
           <strong>{counts.completed}</strong>
-          <small>Finished journeys</small>
+          <small>{t("cropCycles.finishedJourneys")}</small>
         </div>
 
       </section>
@@ -409,10 +422,10 @@ const CropCycles = () => {
 
         <div className="crop-cycle-tabs">
           {[
-            ["all", "All"],
-            ["active", "Active"],
-            ["planned", "Planned"],
-            ["completed", "Completed"],
+            ["all", t("cropCycles.filterAll")],
+            ["active", t("cropCycles.active")],
+            ["planned", t("cropCycles.planned")],
+            ["completed", t("cropCycles.completed")],
           ].map(([value, label]) => (
             <button
               key={value}
@@ -439,7 +452,7 @@ const CropCycles = () => {
 
           <input
             type="text"
-            placeholder="Search crop or field..."
+            placeholder={t("cropCycles.searchPlaceholder")}
             value={search}
             onChange={(event) =>
               setSearch(event.target.value)
@@ -456,19 +469,15 @@ const CropCycles = () => {
             <Sprout size={28} />
           </div>
 
-          <h2>No crop cycles yet</h2>
+          <h2>{t("cropCycles.noCyclesYet")}</h2>
 
-          <p>
-            Select a recommended crop from one of
-            your fields to start tracking its
-            journey.
-          </p>
+          <p>{t("cropCycles.noCyclesDescription")}</p>
 
           <button
             type="button"
             onClick={() => navigate("/fields")}
           >
-            Open My Fields
+            {t("cropCycles.openMyFields")}
             <ArrowRight size={16} />
           </button>
 
@@ -480,12 +489,9 @@ const CropCycles = () => {
             <Search size={25} />
           </div>
 
-          <h2>No matching cycles</h2>
+          <h2>{t("cropCycles.noMatchingCycles")}</h2>
 
-          <p>
-            Try another search or change the
-            selected filter.
-          </p>
+          <p>{t("cropCycles.noMatchingDescription")}</p>
 
           <button
             type="button"
@@ -494,7 +500,7 @@ const CropCycles = () => {
               setFilter("all");
             }}
           >
-            Reset filters
+            {t("cropCycles.resetFilters")}
           </button>
 
         </section>
@@ -521,7 +527,7 @@ const CropCycles = () => {
               cycle?.currentStage?.name ||
               cycle?.stage?.name ||
               cycle?.currentStageName ||
-              "Crop journey";
+              t("cropCycles.cropJourney");
 
             return (
               <article
@@ -544,7 +550,7 @@ const CropCycles = () => {
                         className={`crop-cycle-status ${status}`}
                       >
                         <CircleDot size={11} />
-                        {getStatusLabel(status)}
+                        {getStatusLabel(status, t)}
                       </span>
                     </div>
 
@@ -553,7 +559,7 @@ const CropCycles = () => {
 
                       <span>
                         {field?.name ||
-                          "Field"}
+                          t("cropCycles.fieldLabel")}
 
                         {field?.location
                           ?.district
@@ -570,7 +576,7 @@ const CropCycles = () => {
 
                   <div>
                     <span>
-                      Current stage
+                      {t("cropCycles.currentStageLabel")}
                     </span>
 
                     <strong>
@@ -600,10 +606,9 @@ const CropCycles = () => {
                     <CalendarDays size={14} />
 
                     <span>
-                      Started{" "}
-                      {formatDate(
-                        cycle?.startDate
-                      )}
+                      {t("cropCycles.started", {
+                        date: formatDate(cycle?.startDate),
+                      })}
                     </span>
                   </div>
 
@@ -617,13 +622,16 @@ const CropCycles = () => {
                     )}
 
                     <span>
-                      {status ===
-                      "completed"
-                        ? `Completed ${formatDate(
-                            cycle?.actualHarvestDate ||
-                              cycle?.endDate
-                          )}`
-                        : `${progress}% journey complete`}
+                      {status === "completed"
+                        ? t("cropCycles.completedOn", {
+                            date: formatDate(
+                              cycle?.actualHarvestDate ||
+                                cycle?.endDate
+                            ),
+                          })
+                        : t("cropCycles.journeyProgress", {
+                            progress,
+                          })}
                     </span>
                   </div>
 
@@ -638,7 +646,7 @@ const CropCycles = () => {
                     )
                   }
                 >
-                  Open Crop Dashboard
+                  {t("cropCycles.openCropDashboard")}
                   <ArrowRight size={16} />
                 </button>
 

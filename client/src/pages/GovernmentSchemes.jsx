@@ -1,5 +1,6 @@
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ExternalLink,
   FileText,
@@ -15,9 +16,9 @@ import { api } from "../lib/api";
 import "./GovernmentSchemes.css";
 
 const GovernmentSchemes = () => {
+  const { t, i18n } = useTranslation();
   const [schemes, setSchemes] = useState([]);
-  const [selectedScheme, setSelectedScheme] =
-    useState(null);
+  const [selectedScheme, setSelectedScheme] =  useState(null);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -48,10 +49,7 @@ const GovernmentSchemes = () => {
           err
         );
 
-        setError(
-          err.message ||
-            "Unable to load government schemes"
-        );
+        setError("govSchemes.errorLoad");
       } finally {
         setLoading(false);
       }
@@ -124,11 +122,16 @@ const GovernmentSchemes = () => {
     setAiError("");
 
     try {
+      const activeLanguage = i18n.resolvedLanguage || i18n.language || "en";
+
       const data = await api.post(
         "/government-schemes/ai",
         {
           question: trimmedQuestion,
           conversationHistory: messages,
+          language: activeLanguage.startsWith("hi")
+            ? "hi"
+            : "en",
         }
       );
 
@@ -149,10 +152,7 @@ const GovernmentSchemes = () => {
         err
       );
 
-      setAiError(
-        err.message ||
-          "Unable to get help from KrishiSphere AI."
-      );
+      setAiError("error");
     } finally {
       setAiLoading(false);
     }
@@ -186,7 +186,7 @@ const GovernmentSchemes = () => {
           />
 
           <p>
-            Loading government schemes...
+            {t("govSchemes.loading")}
           </p>
         </div>
       </section>
@@ -201,15 +201,13 @@ const GovernmentSchemes = () => {
 
         <div>
           <span className="schemes-eyebrow">
-            FARMER SUPPORT
+            {t("govSchemes.farmerSupport")}
           </span>
 
-          <h1>Government Schemes</h1>
+          <h1>{t("govSchemes.title")}</h1>
 
           <p>
-            Explore government schemes and farmer
-            support programmes collected from
-            official sources.
+            {t("govSchemes.description")}
           </p>
         </div>
 
@@ -218,11 +216,11 @@ const GovernmentSchemes = () => {
 
           <div>
             <strong>
-              Official Sources
+              {t("govSchemes.officialSources")}
             </strong>
 
             <span>
-              Linked to government portals
+              {t("govSchemes.governmentPortals")}
             </span>
           </div>
         </div>
@@ -232,7 +230,7 @@ const GovernmentSchemes = () => {
 
       {error && (
         <div className="schemes-error">
-          {error}
+         {t(error)}
         </div>
       )}
 
@@ -243,7 +241,7 @@ const GovernmentSchemes = () => {
 
           <input
             type="text"
-            placeholder="Search schemes, categories or benefits..."
+            placeholder={t("govSchemes.searchPlaceholder")}
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -263,7 +261,9 @@ const GovernmentSchemes = () => {
               key={item}
               value={item}
             >
-              {item}
+              {item === "All"
+                ? t("govSchemes.allCategories")
+                : item}
             </option>
           ))}
         </select>
@@ -271,13 +271,10 @@ const GovernmentSchemes = () => {
       </div>
 
       <div className="schemes-result-info">
-        Showing{" "}
-        <strong>
-          {filteredSchemes.length}
-        </strong>{" "}
-        of{" "}
-        <strong>{schemes.length}</strong>{" "}
-        schemes
+        {t("govSchemes.resultsCount", {
+          shown: filteredSchemes.length,
+          total: schemes.length,
+        })}
       </div>
 
       {filteredSchemes.length === 0 ? (
@@ -285,10 +282,10 @@ const GovernmentSchemes = () => {
 
           <FileText size={42} />
 
-          <h3>No schemes found</h3>
+          <h3>{t("govSchemes.noSchemesFound")}</h3>
 
           <p>
-            Try a different search term or category.
+            {t("govSchemes.noSchemesDescription")}
           </p>
 
         </div>
@@ -342,7 +339,7 @@ const GovernmentSchemes = () => {
                     setSelectedScheme(scheme)
                   }
                 >
-                  View Details
+                   {t("govSchemes.viewDetails")}
                 </button>
 
                 <a
@@ -351,7 +348,7 @@ const GovernmentSchemes = () => {
                   rel="noopener noreferrer"
                   className="scheme-official-btn"
                 >
-                  Official Portal
+                  {t("govSchemes.officialPortal")}
                   <ExternalLink size={16} />
                 </a>
 
@@ -380,13 +377,11 @@ const GovernmentSchemes = () => {
               </span>
 
               <h2>
-                Ask about government schemes
+                {t("govSchemes.aiHeading")}
               </h2>
 
               <p>
-                Ask questions normally and continue
-                the conversation with follow-up
-                questions.
+                {t("govSchemes.aiDescription")}
               </p>
             </div>
 
@@ -398,7 +393,7 @@ const GovernmentSchemes = () => {
               className="scheme-ai-clear"
               onClick={clearChat}
             >
-              Clear chat
+              {t("govSchemes.clearChat")}
             </button>
           )}
 
@@ -406,54 +401,51 @@ const GovernmentSchemes = () => {
 
         {messages.length === 0 && (
           <div className="scheme-ai-suggestions">
-
             <button
               type="button"
               onClick={() =>
                 askSuggestedQuestion(
-                  "Which scheme is related to crop insurance?"
+                  t("govSchemes.questionCropInsurance")
                 )
               }
             >
-              Crop insurance
+              {t("govSchemes.suggestionCropInsurance")}
             </button>
 
             <button
               type="button"
               onClick={() =>
                 askSuggestedQuestion(
-                  "Which scheme can help with irrigation?"
+                  t("govSchemes.questionIrrigation")
                 )
               }
             >
-              Irrigation support
+              {t("govSchemes.suggestionIrrigation")}
             </button>
 
             <button
               type="button"
               onClick={() =>
                 askSuggestedQuestion(
-                  "Tell me about Kisan Credit Card."
+                  t("govSchemes.questionCreditCard")
                 )
               }
             >
-              Kisan Credit Card
+              {t("govSchemes.suggestionCreditCard")}
             </button>
 
             <button
               type="button"
               onClick={() =>
                 askSuggestedQuestion(
-                  "What is the Soil Health Card scheme?"
+                  t("govSchemes.questionSoilHealth")
                 )
               }
             >
-              Soil health
+              {t("govSchemes.suggestionSoilHealth")}
             </button>
-
           </div>
         )}
-
         {messages.length > 0 && (
           <div className="scheme-ai-messages">
 
@@ -477,7 +469,7 @@ const GovernmentSchemes = () => {
 
                   <span className="scheme-ai-message-label">
                     {message.role === "user"
-                      ? "You"
+                      ? t("govSchemes.youLabel")
                       : "KrishiSphere AI"}
                   </span>
 
@@ -519,7 +511,7 @@ const GovernmentSchemes = () => {
 
         {aiError && (
           <div className="scheme-ai-error">
-            {aiError}
+            {t("govSchemes.errorGetAiHelp")}
           </div>
         )}
 
@@ -538,7 +530,7 @@ const GovernmentSchemes = () => {
               onChange={(e) =>
                 setQuestion(e.target.value)
               }
-              placeholder="Ask anything about government schemes..."
+              placeholder={t("govSchemes.aiPlaceholder")}
               disabled={aiLoading}
             />
 
@@ -563,18 +555,15 @@ const GovernmentSchemes = () => {
 
             <span>
               {aiLoading
-                ? "Thinking..."
-                : "Ask AI"}
+                ? t("govSchemes.thinking")
+                : t("govSchemes.askAI")}
             </span>
           </button>
 
         </form>
 
         <p className="scheme-ai-note">
-          KrishiSphere AI explains the scheme information
-          available in KrishiSphere. Final eligibility and
-          application decisions are made by the relevant
-          government authority.
+          {t("govSchemes.aiSafetyNote")}
         </p>
 
       </section>
@@ -612,7 +601,7 @@ const GovernmentSchemes = () => {
                 onClick={() =>
                   setSelectedScheme(null)
                 }
-                aria-label="Close scheme details"
+                aria-label={t("govSchemes.closeSchemeDetails")}
               >
                 <X size={21} />
               </button>
@@ -624,22 +613,22 @@ const GovernmentSchemes = () => {
             </p>
 
             <SchemeSection
-              title="Benefits"
+              title={t("govSchemes.benefits")}
               items={selectedScheme.benefits}
             />
 
             <SchemeSection
-              title="Eligibility"
+              title={t("govSchemes.eligibility")}
               items={selectedScheme.eligibility}
             />
 
             <SchemeSection
-              title="Required Documents"
+              title={t("govSchemes.requiredDocuments")}
               items={selectedScheme.documents}
             />
 
             <SchemeSection
-              title="How to Apply"
+              title={t("govSchemes.howToApply")}
               items={
                 selectedScheme.applicationSteps
               }
@@ -649,18 +638,18 @@ const GovernmentSchemes = () => {
 
               <div>
                 <strong>
-                  Government Source
+                   {t("govSchemes.governmentSource")}
                 </strong>
 
                 <span>
-                  Last verified:{" "}
+                  {t("govSchemes.lastVerified")}:{" "}
                   {selectedScheme.lastVerifiedAt
                     ? new Date(
                         selectedScheme.lastVerifiedAt
                       ).toLocaleDateString(
-                        "en-IN"
+                        i18n.resolvedLanguage || i18n.language || "en-IN"
                       )
-                    : "Not available"}
+                    : t("govSchemes.notAvailable")}
                 </span>
               </div>
 
@@ -672,7 +661,7 @@ const GovernmentSchemes = () => {
                 rel="noopener noreferrer"
                 className="scheme-official-btn"
               >
-                Visit Official Portal
+                {t("govSchemes.visitOfficialPortal")}
                 <ExternalLink size={16} />
               </a>
 
