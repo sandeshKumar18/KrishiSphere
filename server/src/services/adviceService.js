@@ -295,23 +295,71 @@ RESPONSE LANGUAGE: English.
         .join("\n")
     : "No previous conversation.";
 
-  const schemeContext = schemes.map((scheme) => ({
-    name: scheme.name,
-    slug: scheme.slug,
-    level: scheme.level,
-    state: scheme.state,
-    category: scheme.category,
-    department: scheme.department,
-    shortDescription: scheme.shortDescription,
-    benefits: scheme.benefits,
-    eligibility: scheme.eligibility,
-    documents: scheme.documents,
-    applicationSteps: scheme.applicationSteps,
-    officialPortal: scheme.officialPortal,
-    officialSource: scheme.officialSource,
-    tags: scheme.tags,
-    lastVerifiedAt: scheme.lastVerifiedAt,
-  }));
+  const getLocalizedValue = (hindiValue, englishValue) => {
+  if (responseLanguage !== "hi") {
+    return englishValue;
+  }
+
+  if (Array.isArray(hindiValue)) {
+    return hindiValue.length > 0
+      ? hindiValue
+      : englishValue;
+  }
+
+  if (
+    typeof hindiValue === "string" &&
+    hindiValue.trim()
+  ) {
+    return hindiValue;
+  }
+
+  return englishValue;
+};
+
+const schemeContext = schemes.map((scheme) => ({
+  name: getLocalizedValue(scheme.nameHi, scheme.name),
+  slug: scheme.slug,
+  level: scheme.level,
+
+  state: getLocalizedValue(scheme.stateHi, scheme.state),
+
+  category: scheme.category,
+
+  department: getLocalizedValue(
+    scheme.departmentHi,
+    scheme.department
+  ),
+
+  shortDescription: getLocalizedValue(
+    scheme.shortDescriptionHi,
+    scheme.shortDescription
+  ),
+
+  benefits: getLocalizedValue(
+    scheme.benefitsHi,
+    scheme.benefits
+  ),
+
+  eligibility: getLocalizedValue(
+    scheme.eligibilityHi,
+    scheme.eligibility
+  ),
+
+  documents: getLocalizedValue(
+    scheme.documentsHi,
+    scheme.documents
+  ),
+
+  applicationSteps: getLocalizedValue(
+    scheme.applicationStepsHi,
+    scheme.applicationSteps
+  ),
+
+  officialPortal: scheme.officialPortal,
+  officialSource: scheme.officialSource,
+  tags: scheme.tags,
+  lastVerifiedAt: scheme.lastVerifiedAt,
+}));
 
   const input = `
 ${languageInstruction}

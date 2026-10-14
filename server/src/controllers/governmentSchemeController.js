@@ -134,25 +134,32 @@ export const askGovernmentSchemeAI = async (
       isActive: true,
     })
       .select(
-        [
-          "name",
-          "slug",
-          "level",
-          "state",
-          "category",
-          "department",
-          "shortDescription",
-          "benefits",
-          "eligibility",
-          "documents",
-          "applicationSteps",
-          "officialPortal",
-          "officialSource",
-          "tags",
-          "lastVerifiedAt",
-        ].join(" ")
-      )
-      .lean();
+      [
+        "name",
+        "nameHi",
+        "slug",
+        "level",
+        "state",
+        "stateHi",
+        "category",
+        "department",
+        "departmentHi",
+        "shortDescription",
+        "shortDescriptionHi",
+        "benefits",
+        "benefitsHi",
+        "eligibility",
+        "eligibilityHi",
+        "documents",
+        "documentsHi",
+        "applicationSteps",
+        "applicationStepsHi",
+        "officialPortal",
+        "officialSource",
+        "tags",
+        "lastVerifiedAt",
+      ].join(" ")
+    )
 
     if (!schemes.length) {
       return res.status(404).json({

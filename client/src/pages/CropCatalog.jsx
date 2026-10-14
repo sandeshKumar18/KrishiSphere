@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ChevronDown,
   ChevronUp,
@@ -10,6 +11,7 @@ import { api } from "../lib/api.js";
 import "./CropCatalog.css";
 
 const CropCatalog = () => {
+  const { t } = useTranslation();
   const [crops, setCrops] = useState([]);
   const [search, setSearch] = useState("");
   const [expandedCrop, setExpandedCrop] = useState(null);
@@ -32,10 +34,7 @@ const CropCatalog = () => {
       } catch (err) {
         console.error("Crop catalog error:", err);
 
-        setError(
-          err.message ||
-            "Unable to load crop catalog."
-        );
+        setError("cropCatalog.errorLoad");
       } finally {
         setLoading(false);
       }
@@ -75,20 +74,17 @@ const CropCatalog = () => {
         <div className="crop-page-header">
           <div>
             <span className="crop-eyebrow">
-              Crop knowledge
+              {t("cropCatalog.eyebrow")}
             </span>
 
-            <h1>Crop Catalog</h1>
+            <h1>{t("cropCatalog.title")}</h1>
 
-            <p>
-              Explore crops available in
-              KrishiSphere.
-            </p>
+            <p>{t("cropCatalog.loadingDescription")}</p>
           </div>
         </div>
 
         <div className="crop-loading">
-          Loading crop catalog...
+           {t("cropCatalog.loading")}
         </div>
       </div>
     );
@@ -99,20 +95,17 @@ const CropCatalog = () => {
       <div className="crop-page-header">
         <div>
           <span className="crop-eyebrow">
-            Crop knowledge
+            {t("cropCatalog.eyebrow")}
           </span>
 
-          <h1>Crop Catalog</h1>
+          <h1>{t("cropCatalog.title")}</h1>
 
-          <p>
-            Explore configured crops, growing
-            duration, seasons and growth stages.
-          </p>
+          <p>{t("cropCatalog.description")}</p>
         </div>
 
         <div className="crop-count">
           <Leaf size={18} />
-          <span>{crops.length} crops</span>
+          <span>{t("cropCatalog.cropCount",{count:crops.length,})}</span>
         </div>
       </div>
 
@@ -122,7 +115,7 @@ const CropCatalog = () => {
 
           <input
             type="text"
-            placeholder="Search crop or scientific name..."
+            placeholder={t("cropCatalog.searchPlaceholder")}
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
@@ -133,7 +126,7 @@ const CropCatalog = () => {
 
       {error && (
         <div className="crop-error">
-          {error}
+          {t(error)}
         </div>
       )}
 
@@ -141,12 +134,9 @@ const CropCatalog = () => {
         <div className="crop-empty">
           <Leaf size={32} />
 
-          <h3>No crops found</h3>
+          <h3>{t("cropCatalog.noCropsFound")}</h3>
+          <p>{t("cropCatalog.noCropsDescription")}</p>
 
-          <p>
-            Try another crop name or scientific
-            name.
-          </p>
         </div>
       )}
 
@@ -157,8 +147,10 @@ const CropCatalog = () => {
           const durationText =
             crop?.durationDays?.min != null &&
             crop?.durationDays?.max != null
-              ? `${crop.durationDays.min}–${crop.durationDays.max} days`
-              : "Not configured";
+              ? t("cropCatalog.durationRange", {
+                min: crop.durationDays.min,
+                max: crop.durationDays.max,
+              }) : t("cropCatalog.notConfigured");
 
           const stageCount = Array.isArray(
             crop?.growthStages
@@ -210,22 +202,22 @@ const CropCatalog = () => {
               {/* Meta */}
               <div className="crop-meta">
                 <div>
-                  <span>Duration</span>
+                  <span>{t("cropCatalog.duration")}</span>
 
                   <strong>
                     {lifecycleReady
                       ? durationText
-                      : "Not configured"}
+                      : t("cropCatalog.notConfigured")}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Growth stages</span>
+                  <span>{t("cropCatalog.growthStages")}</span>
 
                   <strong>
                     {lifecycleReady
                       ? stageCount
-                      : "Not configured"}
+                      : t("cropCatalog.notConfigured")}
                   </strong>
                 </div>
               </div>
@@ -234,7 +226,7 @@ const CropCatalog = () => {
               {Array.isArray(crop.seasons) &&
                 crop.seasons.length > 0 && (
                   <div className="crop-seasons">
-                    <span>Seasons</span>
+                    <span>{t("cropCatalog.seasons")}</span>
 
                     <div>
                       {crop.seasons.map(
@@ -261,8 +253,8 @@ const CropCatalog = () => {
               >
                 <span>
                   {isExpanded
-                    ? "Hide growth stages"
-                    : "View growth stages"}
+                    ? t("cropCatalog.hideGrowthStages")
+                    : t("cropCatalog.viewGrowthStages")}
                 </span>
 
                 {isExpanded ? (
@@ -296,9 +288,10 @@ const CropCatalog = () => {
                               </h3>
 
                               <span>
-                                Day{" "}
-                                {stage.startDay}–
-                                {stage.endDay}
+                                {t("cropCatalog.dayRange", {
+                                  start: stage.startDay,
+                                  end: stage.endDay,
+                                })}
                               </span>
                             </div>
 
@@ -313,8 +306,7 @@ const CropCatalog = () => {
                     )
                   ) : (
                     <p className="stage-empty">
-                      Growth stages have not been
-                      configured for this crop.
+                      {t("cropCatalog.growthStagesNotConfigured")}
                     </p>
                   )}
                 </div>

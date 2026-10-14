@@ -65,6 +65,50 @@ const governmentSchemeSchema = new mongoose.Schema(
       default: [],
     },
 
+    nameHi: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    stateHi: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    departmentHi: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    shortDescriptionHi: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    benefitsHi: {
+      type: [String],
+      default: [],
+    },
+
+    eligibilityHi: {
+      type: [String],
+      default: [],
+    },
+
+    documentsHi: {
+      type: [String],
+      default: [],
+    },
+
+    applicationStepsHi: {
+      type: [String],
+      default: [],
+    },
+
     officialPortal: {
       type: String,
       required: true,

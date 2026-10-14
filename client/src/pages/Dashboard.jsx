@@ -1410,9 +1410,7 @@ const Dashboard = () => {
                  {t("dashboard.supportResources")}
               </span>
 
-              <h2>
-                <h2>{t("dashboard.needMoreHelp")}</h2>
-              </h2>
+              <h2>{t("dashboard.needMoreHelp")}</h2>             
 
               <p>
                 {t("dashboard.supportDescription")}

@@ -15,6 +15,108 @@ import {
 import { api } from "../lib/api";
 import "./GovernmentSchemes.css";
 
+const getSchemeCategoryLabel = (category, t) => {
+  if (!category) {
+    return t("govSchemes.uncategorized");
+  }
+
+  const normalized = String(category)
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const categoryKeys = {
+    insurance: "insurance",
+    "crop insurance": "cropInsurance",
+    irrigation: "irrigation",
+    "irrigation support": "irrigation",
+    credit: "credit",
+    "kisan credit card": "credit",
+    soil: "soil",
+    "soil health": "soilHealth",
+    "soil health card": "soilHealth",
+    subsidy: "subsidy",
+    "financial assistance": "financialAssistance",
+    agriculture: "agriculture",
+      "agricultural infrastructure": "agriculturalInfrastructure",
+      "agricultural credit": "agriculturalCredit",
+      "income support": "incomeSupport",
+      "irrigation & water management": "irrigationWaterManagement",
+  };
+
+  const translationKey = categoryKeys[normalized];
+
+  return translationKey
+    ? t(`govSchemes.categories.${translationKey}`)
+    : category;
+};
+
+
+const getSchemeLevelLabel = (level, t) => {
+  if (!level) {
+    return t("govSchemes.levelUnavailable");
+  }
+
+  const normalized = String(level)
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (
+    ["central", "central government", "national", "national level"]
+      .includes(normalized)
+  ) {
+    return t("govSchemes.centralGovernment");
+  }
+
+  if (
+    ["state", "state government", "state level"]
+      .includes(normalized)
+  ) {
+    return t("govSchemes.stateGovernment");
+  }
+
+  return level;
+};
+
+const getLocalizedSchemeValue = (
+  scheme,
+  field,
+  isHindi
+) => {
+  const originalValue = scheme?.[field];
+
+  if (!isHindi) {
+    return originalValue;
+  }
+
+  const hindiValue = scheme?.[`${field}Hi`];
+
+  if (
+    hindiValue === undefined ||
+    hindiValue === null
+  ) {
+    return originalValue;
+  }
+
+  if (Array.isArray(hindiValue)) {
+    return hindiValue.length
+      ? hindiValue
+      : originalValue;
+  }
+
+  if (
+    typeof hindiValue === "string" &&
+    !hindiValue.trim()
+  ) {
+    return originalValue;
+  }
+
+  return hindiValue;
+};
+
 const GovernmentSchemes = () => {
   const { t, i18n } = useTranslation();
   const [schemes, setSchemes] = useState([]);
@@ -31,6 +133,12 @@ const GovernmentSchemes = () => {
   const [messages, setMessages] = useState([]);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState("");
+
+  const isHindi = (
+    i18n.resolvedLanguage ||
+    i18n.language ||
+    "en"
+  ).startsWith("hi");
 
   useEffect(() => {
     const fetchSchemes = async () => {
@@ -263,7 +371,7 @@ const GovernmentSchemes = () => {
             >
               {item === "All"
                 ? t("govSchemes.allCategories")
-                : item}
+                : getSchemeCategoryLabel(item,t)}
             </option>
           ))}
         </select>
@@ -301,30 +409,49 @@ const GovernmentSchemes = () => {
               <div className="scheme-card-top">
 
                 <span className="scheme-category">
-                  {scheme.category}
+                  {getSchemeCategoryLabel(scheme.category,t)}
                 </span>
 
                 <span className="scheme-level">
-                  {scheme.level}
+                  {getSchemeLevelLabel(scheme.level,t)}
                 </span>
 
               </div>
 
-              <h2>{scheme.name}</h2>
+              <h2>
+                {getLocalizedSchemeValue(
+                  scheme,
+                  "name",
+                  isHindi
+                )}
+              </h2>
 
               <p className="scheme-description">
-                {scheme.shortDescription}
+                {getLocalizedSchemeValue(
+                  scheme,
+                  "shortDescription",
+                  isHindi
+                )}
               </p>
 
               <div className="scheme-meta">
 
                 <span>
-                  📍 {scheme.state}
+                  📍{" "}
+                  {getLocalizedSchemeValue(
+                    scheme,
+                    "state",
+                    isHindi
+                  )}
                 </span>
 
                 {scheme.department && (
                   <span>
-                    {scheme.department}
+                    {getLocalizedSchemeValue(
+                      scheme,
+                      "department",
+                      isHindi
+                    )}
                   </span>
                 )}
 
@@ -587,11 +714,15 @@ const GovernmentSchemes = () => {
 
               <div>
                 <span className="scheme-category">
-                  {selectedScheme.category}
+                  {getSchemeCategoryLabel(selectedScheme.category, t)}
                 </span>
 
                 <h2>
-                  {selectedScheme.name}
+                  {getLocalizedSchemeValue(
+                    selectedScheme,
+                    "name",
+                    isHindi
+                  )}
                 </h2>
               </div>
 
@@ -609,29 +740,47 @@ const GovernmentSchemes = () => {
             </div>
 
             <p className="scheme-modal-description">
-              {selectedScheme.shortDescription}
+              {getLocalizedSchemeValue(
+                selectedScheme,
+                "shortDescription",
+                isHindi
+              )}
             </p>
 
             <SchemeSection
               title={t("govSchemes.benefits")}
-              items={selectedScheme.benefits}
+              items={getLocalizedSchemeValue(
+                selectedScheme,
+                "benefits",
+                isHindi
+              )}
             />
 
             <SchemeSection
               title={t("govSchemes.eligibility")}
-              items={selectedScheme.eligibility}
+              items={getLocalizedSchemeValue(
+                selectedScheme,
+                "eligibility",
+                isHindi
+              )}
             />
 
             <SchemeSection
               title={t("govSchemes.requiredDocuments")}
-              items={selectedScheme.documents}
+              items={getLocalizedSchemeValue(
+                selectedScheme,
+                "documents",
+                isHindi
+              )}
             />
 
             <SchemeSection
               title={t("govSchemes.howToApply")}
-              items={
-                selectedScheme.applicationSteps
-              }
+              items={getLocalizedSchemeValue(
+                selectedScheme,
+                "applicationSteps",
+                isHindi
+              )}
             />
 
             <div className="scheme-source-box">
