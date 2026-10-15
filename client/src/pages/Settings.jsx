@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import {
   Check,
   ChevronRight,
@@ -19,6 +19,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 import "./Settings.css";
 
 const Settings = () => {
+  const { t } = useTranslation();
+
   const {
     user,
     logout,
@@ -36,8 +38,7 @@ const Settings = () => {
     district: "",
   });
 
-  const [currentPassword, setCurrentPassword] =
-    useState("");
+  const [currentPassword, setCurrentPassword] =  useState("");
 
   const [newPassword, setNewPassword] =
     useState("");
@@ -117,19 +118,14 @@ const Settings = () => {
 
       await refreshUser();
 
-      setMessage(
-        "Profile updated successfully."
-      );
+      setMessage(t("settings.profileUpdated"));
     } catch (err) {
       console.error(
         "Profile update error:",
         err
       );
 
-      setError(
-        err.message ||
-          "Unable to update profile."
-      );
+      setError(t("settings.profileUpdateFailed"));
     } finally {
       setLoading(false);
     }
@@ -146,14 +142,14 @@ const Settings = () => {
       !newPassword
     ) {
       setPasswordError(
-        "Please fill both password fields."
+        t("settings.fillBothPasswordFields")
       );
       return;
     }
 
     if (newPassword.length < 6) {
       setPasswordError(
-        "New password must be at least 6 characters."
+        t("settings.passwordTooShort")
       );
       return;
     }
@@ -173,11 +169,11 @@ const Settings = () => {
       setNewPassword("");
 
       setPasswordMessage(
-        "Password changed successfully."
+        t("settings.passwordChanged")
       );
     } catch (err) {
       console.error(
-        "Password change error:",
+        t("settings.passwordChangeFailed"),
         err
       );
 
@@ -197,7 +193,7 @@ const Settings = () => {
   const displayValue = (value) => {
     return value?.trim()
       ? value
-      : "Not added";
+      : t("settings.notAdded");
   };
 
   const initials =
@@ -216,15 +212,12 @@ const Settings = () => {
         <div>
           <div className="settings-eyebrow">
             <SettingsIcon size={15} />
-            ACCOUNT SETTINGS
+            {t("settings.accountSettings")}
           </div>
 
-          <h1>Settings</h1>
+          <h1>{t("settings.title")}</h1>
 
-          <p>
-            View and manage your KrishiSphere
-            account.
-          </p>
+          <p>{t("settings.description")}</p>
         </div>
 
         <div className="settings-header-icon">
@@ -261,7 +254,7 @@ const Settings = () => {
                   ]
                     .filter(Boolean)
                     .join(", ")
-                : "Location not added"}
+                : t("settings.locationNotAdded")}
             </span>
           </div>
         </div>
@@ -275,7 +268,7 @@ const Settings = () => {
       </section>
 
       <div className="settings-section-title">
-        Account
+         {t("settings.account")}
       </div>
 
       <section
@@ -297,11 +290,10 @@ const Settings = () => {
           </div>
 
           <div className="settings-action-content">
-            <h2>Update Profile</h2>
+            {t("settings.updateProfile")}
 
             <p>
-              Edit your personal information
-              and location.
+              {t("settings.editProfileDescription")}
             </p>
           </div>
 
@@ -324,7 +316,7 @@ const Settings = () => {
               }
             >
               <div className="settings-field">
-                <label>Full name</label>
+                <label>{t("settings.fullName")}</label>
 
                 <div className="settings-input">
                   <User size={17} />
@@ -336,14 +328,14 @@ const Settings = () => {
                     onChange={
                       handleProfileChange
                     }
-                    placeholder="Your name"
+                    placeholder={t("settings.namePlaceholder")}
                     required
                   />
                 </div>
               </div>
 
               <div className="settings-field">
-                <label>Email</label>
+                <label>{t("settings.email")}</label>
 
                 <div className="settings-input disabled">
                   <Mail size={17} />
@@ -356,13 +348,12 @@ const Settings = () => {
                 </div>
 
                 <small>
-                  Email cannot be changed from
-                  Settings.
+                  {t("settings.emailCannotChange")}
                 </small>
               </div>
 
               <div className="settings-field">
-                <label>Phone</label>
+                <label>{t("settings.phone")}</label>
 
                 <div className="settings-input">
                   <Phone size={17} />
@@ -374,13 +365,13 @@ const Settings = () => {
                     onChange={
                       handleProfileChange
                     }
-                    placeholder="Phone number"
+                    placeholder={t("settings.phonePlaceholder")}
                   />
                 </div>
               </div>
 
               <div className="settings-field">
-                <label>State</label>
+                <label>{t("settings.state")}</label>
 
                 <div className="settings-input">
                   <MapPin size={17} />
@@ -392,13 +383,13 @@ const Settings = () => {
                     onChange={
                       handleProfileChange
                     }
-                    placeholder="State"
+                    placeholder={t("settings.state")}
                   />
                 </div>
               </div>
 
               <div className="settings-field">
-                <label>District</label>
+                <label>{t("settings.district")}</label>
 
                 <div className="settings-input">
                   <MapPin size={17} />
@@ -410,7 +401,7 @@ const Settings = () => {
                     onChange={
                       handleProfileChange
                     }
-                    placeholder="District"
+                    placeholder={t("settings.district")}
                   />
                 </div>
               </div>
@@ -436,7 +427,7 @@ const Settings = () => {
                     toggleAction("profile")
                   }
                 >
-                  Cancel
+                  {t("settings.cancel")}
                 </button>
 
                 <button
@@ -446,8 +437,8 @@ const Settings = () => {
                   <Save size={16} />
 
                   {loading
-                    ? "Saving..."
-                    : "Save changes"}
+                    ? t("settings.saving")
+                    : t("settings.saveChanges")}
                 </button>
               </div>
             </form>
@@ -474,10 +465,10 @@ const Settings = () => {
           </div>
 
           <div className="settings-action-content">
-            <h2>Change Password</h2>
+            {t("settings.changePassword")}
 
             <p>
-              Update your account password.
+              {t("settings.updatePasswordDescription")}
             </p>
           </div>
 
@@ -501,7 +492,7 @@ const Settings = () => {
             >
               <div className="settings-field">
                 <label>
-                  Current password
+                  {t("settings.currentPassword")}
                 </label>
 
                 <div className="settings-input">
@@ -515,7 +506,7 @@ const Settings = () => {
                         event.target.value
                       )
                     }
-                    placeholder="Current password"
+                    placeholder={t("settings.currentPassword")}
                     required
                   />
                 </div>
@@ -523,7 +514,7 @@ const Settings = () => {
 
               <div className="settings-field">
                 <label>
-                  New password
+                  {t("settings.newPassword")}
                 </label>
 
                 <div className="settings-input">
@@ -537,14 +528,14 @@ const Settings = () => {
                         event.target.value
                       )
                     }
-                    placeholder="New password"
+                    placeholder={t("settings.newPassword")}
                     minLength={6}
                     required
                   />
                 </div>
 
                 <small>
-                  Minimum 6 characters.
+                  {t("settings.minimumPasswordLength")}
                 </small>
               </div>
 
@@ -569,7 +560,7 @@ const Settings = () => {
                     toggleAction("password")
                   }
                 >
-                  Cancel
+                  {t("settings.cancel")}
                 </button>
 
                 <button
@@ -581,8 +572,8 @@ const Settings = () => {
                   <KeyRound size={16} />
 
                   {passwordLoading
-                    ? "Changing..."
-                    : "Change password"}
+                    ? t("settings.changing")
+                    : t("settings.changePasswordButton")}
                 </button>
               </div>
             </form>
@@ -601,11 +592,10 @@ const Settings = () => {
           </div>
 
           <div className="settings-action-content">
-            <h2>Logout</h2>
+            <h2>{t("settings.logout")}</h2>
 
             <p>
-              Sign out from your KrishiSphere
-              account.
+              {t("settings.logoutDescription")}
             </p>
           </div>
 

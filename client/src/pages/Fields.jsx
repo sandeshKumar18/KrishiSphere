@@ -128,7 +128,7 @@ const Fields = () => {
 
   if (!fieldId) {
     setError(
-      "This field does not have a valid ID."
+      t("fields.invalidFieldId")
     );
     return;
   }
@@ -186,30 +186,24 @@ const Fields = () => {
     const area = Number(form.area);
 
     if (!form.name.trim()) {
-      setError(
-        "Please enter a field name."
-      );
+      setError(t("fields.enterFieldName"));
       return;
     }
 
     if (!area || area <= 0) {
-      setError(
-        "Please enter a valid field area."
-      );
+        setError(t("fields.invalidFieldArea"));
       return;
     }
 
     if (!form.state.trim()) {
       setError(
-        "Please enter the state."
+        t("fields.enterState")
       );
       return;
     }
 
     if (!form.district.trim()) {
-      setError(
-        "Please enter the district."
-      );
+      setError(t("fields.enterDistrict"));
       return;
     }
 
@@ -246,7 +240,7 @@ const Fields = () => {
 
     await loadFields();
   } catch (err) {
-    setError("fields.errorSaveField");
+    setError(t("fields.saveFieldFailed"));
 
     setError(
       err.message ||
@@ -356,7 +350,7 @@ const Fields = () => {
 
     if (!fieldId) {
       setError(
-        "This field does not have a valid ID."
+        t("fields.invalidFieldId")
       );
       return;
     }
@@ -369,7 +363,7 @@ const Fields = () => {
 
   if (!fieldId) {
     setError(
-      "This field does not have a valid ID."
+      t("fields.invalidFieldId")
     );
     return;
   }
@@ -551,9 +545,7 @@ const confirmDeleteField = async () => {
           </div>
 
           <div>
-            <strong>
-              Something went wrong
-            </strong>
+            <strong>{t("fields.somethingWentWrong")}</strong>
 
             <p>{error ? t(error) : ""}</p>
           </div>
@@ -592,11 +584,7 @@ const confirmDeleteField = async () => {
                   : t("fields.addDescription")}
               </p>
 
-              <p>
-                Enter the basic details of
-                this field. You can add
-                soil test information later.
-              </p>
+              <p>{t("fields.fieldFormHelp")}</p>
             </div>
 
             <div className="add-field-icon">
@@ -926,9 +914,7 @@ const confirmDeleteField = async () => {
                           {field.name}
                         </h3>
 
-                        <span>
-                          Field
-                        </span>
+                        <span>{t("fields.fieldBadge")}</span>
                       </div>
 
                       <div className="field-item-location">
@@ -939,9 +925,7 @@ const confirmDeleteField = async () => {
                       <div className="field-item-meta">
 
                         <div>
-                          <span>
-                            Area
-                          </span>
+                          <span>{t("fields.areaLabel")}</span>
 
                           <strong>
                             {field.area ||
@@ -952,9 +936,7 @@ const confirmDeleteField = async () => {
                         </div>
 
                         <div>
-                          <span>
-                            Soil
-                          </span>
+                          <span>{t("fields.soilLabel")}</span>
 
                           <strong>
                             {field.soilType || t("fields.notSpecified")}
@@ -978,7 +960,7 @@ const confirmDeleteField = async () => {
                 className="field-open-button"
                 onClick={() => openField(field)}
               >
-                Open
+                 {t("fields.openField")}
                 <ArrowRight size={16} />
               </button>
 
@@ -988,7 +970,7 @@ const confirmDeleteField = async () => {
                 disabled={
                   deletingFieldId === String(fieldId)
                 }
-                title="Delete field"
+                title={t("fields.deleteFieldTitle")}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -1021,7 +1003,7 @@ const confirmDeleteField = async () => {
                 onClick={() =>
                   handleEditField(field)
                 }
-                title="Edit field"
+                title={t("fields.editFieldTitle")}
               >
                 <Edit3 size={16} />
               </button>

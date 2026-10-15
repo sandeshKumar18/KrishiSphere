@@ -21,6 +21,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { api } from "../lib/api";
 
@@ -64,7 +65,7 @@ const formatMarketPrice = (value) => {
   })}`;
 };
 
-const parseAIResponse = (text) => {
+const parseAIResponse = (text,t) => {
   if (!text) return [];
 
   const lines = text
@@ -74,11 +75,11 @@ const parseAIResponse = (text) => {
     .filter(Boolean);
 
   const headings = [
-    "Summary:",
-    "What to do now:",
-    "What to monitor:",
-    "When to take action:",
-    "Important note:",
+    { source: "Summary:", key: "summary" },
+    { source: "What to do now:", key: "whatToDoNow" },
+    { source: "What to monitor:", key: "whatToMonitor" },
+    { source: "When to take action:", key: "whenToTakeAction" },
+    { source: "Important note:", key: "importantNote" },
   ];
 
   const sections = [];
@@ -86,22 +87,16 @@ const parseAIResponse = (text) => {
 
   lines.forEach((line) => {
     const heading = headings.find(
-      (item) =>
-        line.toLowerCase() ===
-        item.toLowerCase()
+      (item) => line.toLowerCase() === item.source.toLowerCase()
     );
 
     if (heading) {
       currentSection = {
-        title: heading.replace(":", ""),
+        title: t(`cropCycleDashboard.${heading.key}`),
         bullets: [],
         paragraphs: [],
       };
-
-      sections.push(currentSection);
-      return;
     }
-
     const cleanLine = line
       .replace(/^[-*•]\s*/, "")
       .replace(/^#{1,6}\s*/, "")
@@ -109,7 +104,7 @@ const parseAIResponse = (text) => {
 
     if (!currentSection) {
       currentSection = {
-        title: "Guidance",
+        title: t("cropCycleDashboard.guidance"),
         bullets: [],
         paragraphs: [],
       };
@@ -134,6 +129,7 @@ const parseAIResponse = (text) => {
 const CropCycleDashboard = () => {
   const { cropCycleId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [dashboard, setDashboard] =
     useState(null);
@@ -185,7 +181,7 @@ const CropCycleDashboard = () => {
 
       setError(
         err.message ||
-          "Unable to load crop dashboard."
+          t("cropCycleDashboard.unableToLoadDashboard")
       );
     } finally {
       setLoading(false);
@@ -198,9 +194,7 @@ const CropCycleDashboard = () => {
       cropCycleId === "undefined"
     ) {
       setLoading(false);
-      setError(
-        "Crop cycle ID is missing from the URL."
-      );
+      setError(t("cropCycleDashboard.missingCycleId"));
       return;
     }
 
@@ -240,7 +234,7 @@ const completeTask = async (taskId) => {
 
     setError(
       err.message ||
-        "Unable to update task."
+       t("cropCycleDashboard.unableToUpdateTask")
     );
   } finally {
     setUpdatingTask(null);
@@ -283,7 +277,7 @@ const completeTask = async (taskId) => {
       } catch (err) {
         setError(
           err.message ||
-            "Unable to generate crop tasks."
+             t("cropCycleDashboard.unableToGenerateTasks")
         );
       } finally {
         setGeneratingTasks(false);
@@ -332,8 +326,7 @@ const completeTask = async (taskId) => {
       );
 
       setError(
-        err.message ||
-          "Unable to update crop stage."
+        err.message ||t("cropCycleDashboard.unableToUpdateStage")
       );
     } finally {
       setUpdatingStage(false);
@@ -357,9 +350,7 @@ const completeTask = async (taskId) => {
         totalTasks === 0 ||
         completedTasks < totalTasks
       ) {
-        setError(
-          "Complete all crop tasks before completing the crop cycle."
-        );
+        setError(t("cropCycleDashboard.completeAllTasksFirst"));
         return;
       }
 
@@ -379,7 +370,7 @@ const completeTask = async (taskId) => {
 
       setError(
         err.message ||
-          "Unable to complete crop cycle."
+          t("cropCycleDashboard.unableToCompleteCycle")
       );
     } finally {
       setCompletingCycle(false);
@@ -416,7 +407,7 @@ const completeTask = async (taskId) => {
     } catch (err) {
       setError(
         err.message ||
-          "Unable to get AI advice."
+           t("cropCycleDashboard.unableToGetAdvice")
       );
     } finally {
       setAdviceLoading(false);
@@ -457,16 +448,16 @@ const completeTask = async (taskId) => {
           </div>
 
           <p className="ccd-eyebrow">
-            CROP DASHBOARD
+            {t("cropCycleDashboard.cropDashboard")}
           </p>
 
           <h1>
-            Unable to load this crop
+            {t("cropCycleDashboard.unableToLoad")}
           </h1>
 
           <p>
             {error ||
-              "Something went wrong while loading this crop cycle."}
+               t("cropCycleDashboard.loadingError")}
           </p>
 
           <div className="ccd-error-actions">
@@ -478,7 +469,7 @@ const completeTask = async (taskId) => {
               }
             >
               <ArrowLeft size={16} />
-              Back to Fields
+              {t("cropCycleDashboard.backToFields")}
             </button>
 
             <button
@@ -487,7 +478,7 @@ const completeTask = async (taskId) => {
               onClick={loadDashboard}
             >
               <RefreshCw size={16} />
-              Try Again
+              {t("cropCycleDashboard.tryAgain")}
             </button>
           </div>
         </div>
@@ -613,11 +604,11 @@ const completeTask = async (taskId) => {
   const cycleStatusLabel =
     cropCycle?.status ===
     "completed"
-      ? "Completed"
+      ? t("cropCycleDashboard.completed")
       : cropCycle?.status ===
         "active"
-      ? "Active"
-      : "Planned";
+      ? t("cropCycleDashboard.active")
+      : t("cropCycleDashboard.planned");
 
   return (
     <div className="ccd-page">
@@ -632,14 +623,14 @@ const completeTask = async (taskId) => {
           }
         >
           <ArrowLeft size={16} />
-          Back to fields
+          {t("cropCycleDashboard.backToFields")}
         </button>
 
         <div className="ccd-header-row">
           <div>
             <div className="ccd-eyebrow">
               <Leaf size={14} />
-              CROP MANAGEMENT
+              {t("cropCycleDashboard.cropManagement")}
             </div>
 
             <div className="ccd-title-line">
@@ -650,7 +641,7 @@ const completeTask = async (taskId) => {
               <div>
                 <h1>
                   {crop?.name ||
-                    "Crop Dashboard"}
+                    t("cropCycleDashboard.cropDashboard")}
                 </h1>
 
                 <div className="ccd-location">
@@ -658,7 +649,7 @@ const completeTask = async (taskId) => {
 
                   <span>
                     {field?.name ||
-                      "Field"}
+                      t("cropCycleDashboard.field")}
 
                     {locationText
                       ? ` · ${locationText}`
@@ -716,8 +707,8 @@ const completeTask = async (taskId) => {
         <div className="ccd-stage-hero-main">
           <div className="ccd-section-kicker">
             {isCompleted
-              ? "CROP CYCLE COMPLETED"
-              : "CURRENT STAGE"}
+              ? t("cropCycleDashboard.cycleCompleted")
+              : t("cropCycleDashboard.currentStage")}
           </div>
 
           <div className="ccd-stage-heading">
@@ -728,12 +719,12 @@ const completeTask = async (taskId) => {
             <div>
               <h2>
                 {currentStage?.name ||
-                  "Not started"}
+                  t("cropCycleDashboard.notStarted")}
               </h2>
 
               <p>
                 {currentStage?.description ||
-                  "No stage information available."}
+                   t("cropCycleDashboard.noStageInfo")}
               </p>
             </div>
           </div>
@@ -741,7 +732,7 @@ const completeTask = async (taskId) => {
           <div className="ccd-progress">
             <div className="ccd-progress-top">
               <span>
-                Overall crop progress
+                {t("cropCycleDashboard.overallProgress")}
               </span>
 
               <strong>
@@ -762,11 +753,11 @@ const completeTask = async (taskId) => {
                 {isCompleted
                   ? totalStages
                   : completedStages}{" "}
-                of {totalStages} stages
+                / {totalStages} {t("cropCycleDashboard.stages")}
               </span>
 
               <span>
-                Started{" "}
+                {t("cropCycleDashboard.started")}{" "}
                 {formattedStartDate}
               </span>
             </div>
@@ -791,11 +782,11 @@ const completeTask = async (taskId) => {
                         size={16}
                         className="ccd-spin"
                       />
-                      Updating...
+                      {t("cropCycleDashboard.updating")}
                     </>
                   ) : (
                     <>
-                      Move to{" "}
+                      {t("cropCycleDashboard.moveTo")}{" "}
                       {nextStage.name}
                       <ArrowRight
                         size={16}
@@ -827,12 +818,12 @@ const completeTask = async (taskId) => {
                         size={16}
                         className="ccd-spin"
                       />
-                      Completing...
+                      {t("cropCycleDashboard.completing")}
                     </>
                   ) : (
                     <>
                       <Check size={16} />
-                      Complete Crop Cycle
+                      {t("cropCycleDashboard.completeCropCycle")}
                     </>
                   )}
                 </button>
@@ -842,8 +833,8 @@ const completeTask = async (taskId) => {
               !isCompleted && (
                 <span className="ccd-stage-hint">
                   {currentTasksComplete
-                    ? `Current tasks complete. You can move to ${nextStage.name}.`
-                    : "Complete all current-stage tasks before moving forward."}
+                    ? t("cropCycleDashboard.currentTasksComplete",{stage:nextStage.name,})
+                    : t("cropCycleDashboard.completeTasksBeforeMoving")}
                 </span>
               )}
 
@@ -856,15 +847,14 @@ const completeTask = async (taskId) => {
               ) && (
                 <div className="ccd-stage-warning">
                   <Check size={15} />
-                  Complete all crop tasks
-                  before closing the cycle.
+                  {t("cropCycleDashboard.completeTasksBeforeClosing")}
                 </div>
               )}
 
             {isCompleted && (
               <div className="ccd-stage-success">
                 <Check size={15} />
-                Crop cycle completed
+                {t("cropCycleDashboard.cycleCompleted")}
               </div>
             )}
           </div>
@@ -872,7 +862,7 @@ const completeTask = async (taskId) => {
 
         <div className="ccd-stage-hero-side">
           <div className="ccd-date-block">
-            <span>STARTED</span>
+            <span>{t("cropCycleDashboard.startDate")}</span>
             <strong>
               {formattedStartDate}
             </strong>
@@ -883,8 +873,8 @@ const completeTask = async (taskId) => {
           <div className="ccd-date-block">
             <span>
               {isCompleted
-                ? "ACTUAL HARVEST"
-                : "EXPECTED HARVEST"}
+                ? t("cropCycleDashboard.actualHarvest")
+                : t("cropCycleDashboard.expectedHarvest")}
             </span>
 
             <strong>
@@ -898,7 +888,7 @@ const completeTask = async (taskId) => {
           <div className="ccd-date-divider" />
 
           <div className="ccd-date-block">
-            <span>TASKS</span>
+            <span>{t("cropCycleDashboard.tasks")}</span>
             <strong>
               {completedTasks}/
               {taskCount}
@@ -916,7 +906,7 @@ const completeTask = async (taskId) => {
           </div>
 
           <div>
-            <span>Temperature</span>
+            <span>{t("cropCycleDashboard.temperature")}</span>
 
             <strong>
               {weather?.temperature ??
@@ -925,9 +915,8 @@ const completeTask = async (taskId) => {
             </strong>
 
             <small>
-              {weather?.humidity ??
-                "—"}
-              % humidity
+              {weather?.humidity ?? "—"}%{" "}
+              {t("cropCycleDashboard.humidity")}
             </small>
           </div>
         </div>
@@ -938,7 +927,7 @@ const completeTask = async (taskId) => {
           </div>
 
           <div>
-            <span>Soil pH</span>
+            <span>{t("cropCycleDashboard.soilPH")}</span>
 
             <strong>
               {soilTest?.pH ??
@@ -946,10 +935,8 @@ const completeTask = async (taskId) => {
             </strong>
 
             <small>
-              Moisture{" "}
-              {soilTest?.moisture ??
-                "—"}
-              %
+              {t("cropCycleDashboard.moisture")}{" "}
+              {soilTest?.moisture ?? "—"}%
             </small>
           </div>
         </div>
@@ -960,7 +947,7 @@ const completeTask = async (taskId) => {
           </div>
 
           <div>
-            <span>Task progress</span>
+            <span>{t("cropCycleDashboard.taskProgress")}</span>
 
             <strong>
               {completedTasks}/
@@ -969,8 +956,8 @@ const completeTask = async (taskId) => {
 
             <small>
               {taskCount === 0
-                ? "No tasks"
-                : "completed"}
+                ? t("cropCycleDashboard.noTasks")
+                : t("cropCycleDashboard.taskCompleted")}
             </small>
           </div>
         </div>
@@ -981,7 +968,7 @@ const completeTask = async (taskId) => {
           </div>
 
           <div>
-            <span>Market records</span>
+            <span>{t("cropCycleDashboard.marketRecords")}</span>
 
             <strong>
               {market?.records
@@ -989,12 +976,11 @@ const completeTask = async (taskId) => {
             </strong>
 
             <small>
-              {market?.scope ===
-              "district"
-                ? "local"
+              {market?.scope === "district"
+                ? t("cropCycleDashboard.local")
                 : market?.scope === "state"
-                ? "state"
-                : "available"}
+                ? t("cropCycleDashboard.state")
+                : t("cropCycleDashboard.available")}
             </small>
           </div>
         </div>
@@ -1008,16 +994,15 @@ const completeTask = async (taskId) => {
           <div className="ccd-panel-header">
             <div>
               <span className="ccd-panel-kicker">
-                CROP JOURNEY
+                {t("cropCycleDashboard.cropJourney")}
               </span>
 
               <h3>
-                Growth stages
+                {t("cropCycleDashboard.growthStages")}
               </h3>
 
               <p>
-                Track where the crop is in
-                its lifecycle.
+                {t("cropCycleDashboard.lifecycleDescription")}
               </p>
             </div>
 
@@ -1030,13 +1015,11 @@ const completeTask = async (taskId) => {
             {stages.map((stage) => {
               const isCurrent =
                 !isCompleted &&
-                stage.order ===
-                  currentStageOrder;
+                stage.order === currentStageOrder;
 
               const isCompletedStage =
                 isCompleted ||
-                stage.order <
-                  currentStageOrder;
+                stage.order < currentStageOrder;
 
               return (
                 <div
@@ -1074,24 +1057,24 @@ const completeTask = async (taskId) => {
 
                       {isCurrent && (
                         <span className="current-badge">
-                          Current
+                          {t("cropCycleDashboard.current")}
                         </span>
                       )}
 
                       {isCompletedStage && (
                         <span className="done-badge">
-                          Done
+                          {t("cropCycleDashboard.done")}
                         </span>
                       )}
                     </div>
 
                     <p>
                       {stage.description ||
-                        "Growth stage information"}
+                         t("cropCycleDashboard.growthStageInfo")}
                     </p>
 
                     <small>
-                      Stage {stage.order}
+                      {t("cropCycleDashboard.currentStage")}{" "} {stage.order}
                     </small>
                   </div>
                 </div>
@@ -1107,20 +1090,23 @@ const completeTask = async (taskId) => {
             <div>
               <span className="ccd-panel-kicker">
                 {isCompleted
-                  ? "TASK HISTORY"
-                  : "TODAY'S WORK"}
+                  ? t("cropCycleDashboard.taskHistory")
+                  : t("cropCycleDashboard.todaysWork")}
               </span>
 
               <h3>
                 {isCompleted
-                  ? "Completed tasks"
-                  : "Current tasks"}
+                  ? t("cropCycleDashboard.completedTasks")
+                  : t("cropCycleDashboard.currentTasks")}
               </h3>
 
               <p>
                 {isCompleted
-                  ? "Work recorded during this crop cycle."
-                  : `Tasks for ${currentStage?.name || "the current stage"}.`}
+                  ? t("cropCycleDashboard.workRecorded")
+                  : t("cropCycleDashboard.tasksForStage", {
+                      stage: currentStage?.name ||
+                        t("cropCycleDashboard.currentStage"),
+                    })}
               </p>
             </div>
 
@@ -1168,8 +1154,8 @@ const completeTask = async (taskId) => {
                               }
                               aria-label={
                                 completed
-                                  ? "Task completed"
-                                  : "Complete task"
+                                  ? t("cropCycleDashboard.taskCompletedLabel")
+                                  : t("cropCycleDashboard.completeTask")
                               }
                             >
                             
@@ -1207,8 +1193,7 @@ const completeTask = async (taskId) => {
                             </span>
 
                             <p>
-                              {task.description ||
-                                "Current crop management task"}
+                              {task.description || t("cropCycleDashboard.currentTaskDescription")}
                             </p>
                           </div>
                         </div>
@@ -1225,13 +1210,11 @@ const completeTask = async (taskId) => {
                   </div>
 
                   <h4>
-                    No task for this stage
+                    {t("cropCycleDashboard.noTaskForStage")}
                   </h4>
 
                   <p>
-                    Create the current-stage
-                    task to begin tracking
-                    your work.
+                    {t("cropCycleDashboard.createTaskDescription")}
                   </p>
 
                   <button
@@ -1250,11 +1233,11 @@ const completeTask = async (taskId) => {
                           size={15}
                           className="ccd-spin"
                         />
-                        Generating...
+                        {t("cropCycleDashboard.generating")}
                       </>
                     ) : (
                       <>
-                        Generate task
+                        {t("cropCycleDashboard.generateTask")}
                         <ArrowRight
                           size={15}
                         />
@@ -1271,11 +1254,11 @@ const completeTask = async (taskId) => {
             <div className="ccd-history">
               <div className="ccd-history-header">
                 <strong>
-                  Completed history
+                  {t("cropCycleDashboard.completedHistory")}
                 </strong>
 
                 <span>
-                  Previous stage work
+                  {t("cropCycleDashboard.previousStageWork")}
                 </span>
               </div>
 
@@ -1323,12 +1306,11 @@ const completeTask = async (taskId) => {
                 </div>
 
                 <h4>
-                  No tasks recorded
+                  {t("cropCycleDashboard.noTasksRecorded")}
                 </h4>
 
                 <p>
-                  There are no tasks stored
-                  for this crop cycle.
+                  {t("cropCycleDashboard.noTasksStored")}
                 </p>
               </div>
             )}
@@ -1340,10 +1322,10 @@ const completeTask = async (taskId) => {
           <div className="ccd-panel-header">
             <div>
               <span className="ccd-panel-kicker">
-                FIELD CONDITIONS
+                {t("cropCycleDashboard.fieldConditions")}
               </span>
 
-              <h3>Weather</h3>
+              <h3>{t("cropCycleDashboard.weather")}</h3>
             </div>
 
             <CloudRain size={20} />
@@ -1359,11 +1341,11 @@ const completeTask = async (taskId) => {
             <div>
               <strong>
                 {field?.location?.district ||
-                  "Field location"}
+                  t("cropCycleDashboard.fieldLocation")}
               </strong>
 
               <span>
-                Current conditions
+                {t("cropCycleDashboard.currentConditions")}
               </span>
             </div>
           </div>
@@ -1372,7 +1354,7 @@ const completeTask = async (taskId) => {
             <div>
               <span>
                 <Droplets size={14} />
-                Humidity
+                {t("cropCycleDashboard.humidity")}
               </span>
 
               <strong>
@@ -1385,7 +1367,7 @@ const completeTask = async (taskId) => {
             <div>
               <span>
                 <CloudRain size={14} />
-                Rainfall
+                {t("cropCycleDashboard.rainfall")}
               </span>
 
               <strong>
@@ -1403,11 +1385,11 @@ const completeTask = async (taskId) => {
           <div className="ccd-panel-header">
             <div>
               <span className="ccd-panel-kicker">
-                SOIL STATUS
+                {t("cropCycleDashboard.soilStatus")}
               </span>
 
               <h3>
-                Latest soil test
+                {t("cropCycleDashboard.latestSoilTest")}
               </h3>
             </div>
 
@@ -1417,21 +1399,21 @@ const completeTask = async (taskId) => {
           {soilTest ? (
             <div className="ccd-soil-grid">
               <div>
-                <span>Nitrogen</span>
+                <span>{t("cropCycleDashboard.nitrogen")}</span>
                 <strong>
                   {soilTest.nitrogen}
                 </strong>
               </div>
 
               <div>
-                <span>Phosphorus</span>
+                <span>{t("cropCycleDashboard.phosphorus")}</span>
                 <strong>
                   {soilTest.phosphorus}
                 </strong>
               </div>
 
               <div>
-                <span>Potassium</span>
+                <span>{t("cropCycleDashboard.potassium")}</span>
                 <strong>
                   {soilTest.potassium}
                 </strong>
@@ -1456,8 +1438,7 @@ const completeTask = async (taskId) => {
               <Droplets size={21} />
 
               <p>
-                No soil test is available
-                for this crop cycle.
+                {t("cropCycleDashboard.noSoilTest")}
               </p>
             </div>
           )}
@@ -1469,11 +1450,11 @@ const completeTask = async (taskId) => {
           <div className="ccd-panel-header">
             <div>
               <span className="ccd-panel-kicker">
-                MARKET
+                {t("cropCycleDashboard.market")}
               </span>
 
               <h3>
-                {crop?.name || "Crop"}
+                {crop?.name || t("cropCycleDashboard.crop")}
               </h3>
             </div>
 
@@ -1485,28 +1466,26 @@ const completeTask = async (taskId) => {
               <div className="ccd-market-context">
                 <div>
                   <strong>
-                    {market.scope ===
-                    "district"
-                      ? "District prices"
-                      : market.scope ===
-                        "state"
-                      ? "State prices"
-                      : "Market prices"}
+                    {market.scope === "district"
+                      ? t("cropCycleDashboard.districtPrices")
+                      : market.scope === "state"
+                      ? t("cropCycleDashboard.statePrices")
+                      : t("cropCycleDashboard.marketPrices")}
                   </strong>
 
                   <span>
-                    Latest available data
+                    {t("cropCycleDashboard.latestAvailableData")}
                   </span>
                 </div>
 
                 <span>
-                  {market.scope ===
-                  "district"
-                    ? "Local"
+                  {market.scope === "district"
+                    ? t("cropCycleDashboard.local")
                     : market.scope ===
                       "state"
-                    ? "State"
-                    : "Market"}
+                    ? t("cropCycleDashboard.state")
+                    : t("cropCycleDashboard.market")
+                  }
                 </span>
               </div>
 
@@ -1544,14 +1523,14 @@ const completeTask = async (taskId) => {
 
                             <span>
                               {record.arrival_date ||
-                                "Date unavailable"}
+                                t("cropCycleDashboard.dateUnavailable")}
                             </span>
                           </div>
 
                           <div className="ccd-market-values">
                             <div>
                               <span>
-                                Min
+                                {t("cropCycleDashboard.min")}
                               </span>
 
                               <strong>
@@ -1563,7 +1542,7 @@ const completeTask = async (taskId) => {
 
                             <div>
                               <span>
-                                Modal
+                                {t("cropCycleDashboard.modal")}
                               </span>
 
                               <strong>
@@ -1575,7 +1554,7 @@ const completeTask = async (taskId) => {
 
                             <div>
                               <span>
-                                Max
+                                {t("cropCycleDashboard.max")}
                               </span>
 
                               <strong>
@@ -1600,7 +1579,7 @@ const completeTask = async (taskId) => {
                   )
                 }
               >
-                Open market
+                {t("cropCycleDashboard.openMarket")}
                 <ArrowRight size={14} />
               </button>
             </>
@@ -1609,8 +1588,7 @@ const completeTask = async (taskId) => {
               <TrendingUp size={21} />
 
               <p>
-                No market data is currently
-                available for this crop.
+                {t("cropCycleDashboard.noMarketData")}
               </p>
             </div>
           )}
@@ -1631,14 +1609,11 @@ const completeTask = async (taskId) => {
             </span>
 
             <h3>
-              Ask about your current crop
-              stage
+              {t("cropCycleDashboard.askCropStage")}
             </h3>
 
             <p>
-              Your question is sent with
-              the crop, current stage, soil
-              and weather context.
+              {t("cropCycleDashboard.aiContextDescription")}
             </p>
           </div>
         </div>
@@ -1655,7 +1630,7 @@ const completeTask = async (taskId) => {
                 event.target.value
               )
             }
-            placeholder="e.g. What should I focus on during this stage?"
+            placeholder={t("cropCycleDashboard.questionPlaceholder")}
           />
 
           <button
@@ -1677,8 +1652,8 @@ const completeTask = async (taskId) => {
             )}
 
             {adviceLoading
-              ? "Thinking..."
-              : "Ask AI"}
+              ? t("cropCycleDashboard.thinking")
+              : t("cropCycleDashboard.askAI")}
           </button>
         </form>
 
@@ -1693,9 +1668,7 @@ const completeTask = async (taskId) => {
                 KrishiSphere AI
               </strong>
 
-              {parseAIResponse(
-                advice
-              ).map((section) => (
+              {parseAIResponse( advice,t ).map((section) => (
                 <div
                   key={section.title}
                   className="ccd-ai-section"
@@ -1755,7 +1728,7 @@ const completeTask = async (taskId) => {
         )}
 
         <div className="ccd-ai-note">
-          AI guidance supports farm decisions. Use validated agronomic recommendations and product labels for exact fertilizer quantities or treatment decisions.
+          {t("cropCycleDashboard.aiNote")}
         </div>
       </section>
     </div>
