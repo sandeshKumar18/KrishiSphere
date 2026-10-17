@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  AlertTriangle,
   Check,
   Edit3,
   Leaf,
@@ -128,7 +129,7 @@ const Fields = () => {
 
   if (!fieldId) {
     setError(
-      t("fields.invalidFieldId")
+      ("fields.invalidFieldId")
     );
     return;
   }
@@ -186,24 +187,24 @@ const Fields = () => {
     const area = Number(form.area);
 
     if (!form.name.trim()) {
-      setError(t("fields.enterFieldName"));
+      setError("fields.enterFieldName");
       return;
     }
 
     if (!area || area <= 0) {
-        setError(t("fields.invalidFieldArea"));
+        setError("fields.invalidFieldArea");
       return;
     }
 
     if (!form.state.trim()) {
       setError(
-        t("fields.enterState")
+        ("fields.enterState")
       );
       return;
     }
 
     if (!form.district.trim()) {
-      setError(t("fields.enterDistrict"));
+      setError("fields.enterDistrict");
       return;
     }
 
@@ -243,8 +244,8 @@ const Fields = () => {
     setError(t("fields.saveFieldFailed"));
 
     setError(
-      err.message ||
-        "Failed to save field."
+      err.message ? "fields.saveFieldFailed"
+        : "fields.saveFieldFailed"
     );
   } finally {
     setSubmitting(false);
@@ -350,7 +351,7 @@ const Fields = () => {
 
     if (!fieldId) {
       setError(
-        t("fields.invalidFieldId")
+        ("fields.invalidFieldId")
       );
       return;
     }
@@ -363,7 +364,7 @@ const Fields = () => {
 
   if (!fieldId) {
     setError(
-      t("fields.invalidFieldId")
+      ("fields.invalidFieldId")
     );
     return;
   }

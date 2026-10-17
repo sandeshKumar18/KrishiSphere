@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { api } from "../lib/api";
 import "./FieldDetails.css";
@@ -314,13 +315,13 @@ const getCurrentStageName = (
 const FieldDetails = () => {
   const { fieldId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [field, setField] = useState(null);
   const [soilTest, setSoilTest] = useState(null);
 
   const [weather, setWeather] = useState(null);
-  const [weatherLoading, setWeatherLoading] =
-    useState(false);
+  const [weatherLoading, setWeatherLoading] = useState(false);
 
   const [recommendation, setRecommendation] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -580,7 +581,7 @@ const FieldDetails = () => {
 
       setError(
         err.message ||
-          "Unable to load field details."
+          t("fieldDetails.loadError")
       );
     } finally {
       setLoading(false);
@@ -722,7 +723,7 @@ const FieldDetails = () => {
 
       setError(
         err.message ||
-          "Unable to save soil test."
+           t("fieldDetails.soilTestSaveError")
       );
     } finally {
       setSavingSoil(false);
@@ -733,7 +734,7 @@ const FieldDetails = () => {
     async () => {
       if (!soilTest) {
         setError(
-          "Add a soil test before generating crop recommendations."
+          t("fieldDetails.soilTestRequired")
         );
         return;
       }
@@ -852,8 +853,7 @@ const FieldDetails = () => {
         );
 
         setError(
-          err.message ||
-            "Unable to generate crop recommendations."
+          err.message ||t("fieldDetails.recommendationsError")
         );
       } finally {
         setRecommendationLoading(
@@ -868,9 +868,9 @@ const FieldDetails = () => {
     
     if (currentCropCycle) {
       setError(
-        `This field already has a ${String(
-          currentCropCycle.status
-        ).toLowerCase()} crop cycle. Open the current crop dashboard instead of starting another crop cycle.`
+        t("fieldDetails.existingCropCycleError", {
+          status: String(currentCropCycle.status).toLowerCase(),
+        })
       );
       return;
     }
@@ -888,9 +888,9 @@ const FieldDetails = () => {
         getRecommendationCrop(item);
 
       setError(
-        `${getCropName(
-          crop
-        )} does not have complete lifecycle data. Configure its duration and growth stages in the Crop Master before selecting it.`
+        t("fieldDetails.incompleteLifecycleData", {
+          cropName: getCropName(crop),
+        })
       );
 
       return;
@@ -911,7 +911,7 @@ const FieldDetails = () => {
       !cropId
     ) {
       setError(
-        "Selected crop data is incomplete. Please generate the recommendation again."
+        t("fieldDetails.incompleteCropData")
       );
 
       return;
@@ -949,7 +949,7 @@ const FieldDetails = () => {
 
       setError(
         err.message ||
-          "Unable to select this crop."
+          t("fieldDetails.selectCropError")
       );
     } finally {
       setSelectingCropId("");
@@ -963,9 +963,9 @@ const FieldDetails = () => {
       
       if (currentCropCycle) {
         setError(
-          `This field already has a ${String(
-            currentCropCycle.status
-          ).toLowerCase()} crop cycle. Complete or cancel the current cycle before starting another one.`
+          t("fieldDetails.activeCyclePreventsNew", {
+            status: String(currentCropCycle.status).toLowerCase(),
+          })
         );
         return;
       }
@@ -977,14 +977,14 @@ const FieldDetails = () => {
 
       if (!recommendationId) {
         setError(
-          "Generate a crop recommendation first."
+          t("fieldDetails.recommendationRequired")
         );
         return;
       }
 
       if (!selectedCrop) {
         setError(
-          "Select a crop before starting a crop cycle."
+          t("fieldDetails.cropSelectionRequired")
         );
         return;
       }
@@ -1001,7 +1001,7 @@ const FieldDetails = () => {
         )
       ) {
         setError(
-          "This crop cannot start a lifecycle yet. Complete its duration and growth-stage configuration in the Crop Master."
+          t("fieldDetails.lifecycleNotConfigured")
         );
 
         return;
@@ -1014,7 +1014,7 @@ const FieldDetails = () => {
 
       if (!cropId) {
         setError(
-          "Selected crop data is incomplete. Please select the crop again."
+          t("fieldDetails.selectedCropIncomplete")
         );
 
         return;
@@ -1074,8 +1074,7 @@ const FieldDetails = () => {
         );
 
         setError(
-          err.message ||
-            "Unable to create crop cycle."
+          err.message ||t("fieldDetails.createCropCycleError")
         );
       } finally {
         setCreatingCycle(
@@ -1198,12 +1197,11 @@ const FieldDetails = () => {
           </div>
 
           <h1>
-            Field not found
+            {t("fieldDetails.fieldNotFound")}
           </h1>
 
           <p>
-            We could not find this field or it
-            may no longer be available.
+            {t("fieldDetails.fieldNotFoundDescription")}
           </p>
 
           <button
@@ -1214,7 +1212,7 @@ const FieldDetails = () => {
             }
           >
             <ArrowLeft size={15} />
-            Back to My Fields
+            {t("fieldDetails.backToMyFields")}
           </button>
 
         </div>
@@ -1237,7 +1235,7 @@ const FieldDetails = () => {
           }
         >
           <ArrowLeft size={16} />
-          Back to My Fields
+          {t("fieldDetails.backToMyFields")}
         </button>
 
         <div className="fd2-header-main">
@@ -1245,12 +1243,12 @@ const FieldDetails = () => {
           <div>
             <span className="fd2-eyebrow">
               <Leaf size={13} />
-              FIELD MANAGEMENT
+              {t("fieldDetails.fieldManagement")}
             </span>
 
             <h1>
               {field.name ||
-                "Field Details"}
+                t("fieldDetails.title")}
             </h1>
 
             {locationText && (
@@ -1267,7 +1265,7 @@ const FieldDetails = () => {
 
             <div>
               <span>
-                FIELD AREA
+                {t("fieldDetails.fieldArea")}
               </span>
 
               <strong>
@@ -1313,8 +1311,8 @@ const FieldDetails = () => {
           <div>
             <strong>
               {notice && !error
-                ? "Success"
-                : "Something went wrong"}
+                ? t("fieldDetails.success")
+                : t("fieldDetails.somethingWentWrong")}
             </strong>
 
             <p>
@@ -1324,7 +1322,7 @@ const FieldDetails = () => {
 
           <button
             type="button"
-            aria-label="Close message"
+            aria-label={t("fieldDetails.closeMessage")}
             onClick={() => {
               setError("");
               setNotice("");
@@ -1346,11 +1344,11 @@ const FieldDetails = () => {
           </div>
 
           <div>
-            <span>SOIL TYPE</span>
+            <span>{t("fieldDetails.soilType")}</span>
 
             <strong>
               {field.soilType ||
-                "Not specified"}
+                t("fieldDetails.notSpecified")}
             </strong>
           </div>
 
@@ -1363,11 +1361,11 @@ const FieldDetails = () => {
           </div>
 
           <div>
-            <span>LOCATION</span>
+            <span>{t("fieldDetails.location")}</span>
 
             <strong>
               {locationText ||
-                "Not specified"}
+                t("fieldDetails.notSpecified")}
             </strong>
           </div>
 
@@ -1380,11 +1378,11 @@ const FieldDetails = () => {
           </div>
 
           <div>
-            <span>CURRENT CROP</span>
+            <span>{t("fieldDetails.currentCrop")}</span>
 
             <strong>
               {currentCropName ||
-                "No active crop"}
+                t("fieldDetails.noActiveCrop")}
             </strong>
           </div>
 
@@ -1400,12 +1398,12 @@ const FieldDetails = () => {
 
           <div>
             <span className="fd2-section-kicker">
-              CURRENT FIELD STATUS
+              {t("fieldDetails.currentFieldStatus")}
             </span>
 
             <h2>
               {currentCropName ||
-                "No active crop"}
+                t("fieldDetails.noActiveCrop")}
             </h2>
           </div>
 
@@ -1429,8 +1427,8 @@ const FieldDetails = () => {
               >
                 {currentCycleStatus ===
                 "active"
-                  ? "Currently growing"
-                  : "Planned crop"}
+                  ? t("fieldDetails.currentlyGrowing")
+                  : t("fieldDetails.plannedCrop")}
               </span>
 
             </div>
@@ -1439,7 +1437,7 @@ const FieldDetails = () => {
 
               <div>
                 <span>
-                  CURRENT STAGE
+                   {t("fieldDetails.currentStage")}
                 </span>
 
                 <strong>
@@ -1449,7 +1447,7 @@ const FieldDetails = () => {
 
               <div>
                 <span>
-                  START DATE
+                 {t("fieldDetails.startDate")}
                 </span>
 
                 <strong>
@@ -1461,7 +1459,7 @@ const FieldDetails = () => {
 
               <div>
                 <span>
-                  EXPECTED HARVEST
+                  {t("fieldDetails.expectedHarvest")}
                 </span>
 
                 <strong>
@@ -1476,10 +1474,9 @@ const FieldDetails = () => {
             <div className="fd2-current-crop-footer">
 
               <p>
-                {currentCycleStatus ===
-                "active"
-                  ? "This field already has a crop growing on it. Start another crop cycle only after the current cycle is completed or cancelled."
-                  : "This field already has a planned crop cycle. Complete or cancel the planned cycle before starting another one."}
+                {currentCycleStatus === "active"
+                  ? t("fieldDetails.activeCropMessage")
+                  : t("fieldDetails.plannedCropMessage")}
               </p>
 
               <button
@@ -1498,7 +1495,7 @@ const FieldDetails = () => {
                   }
                 }}
               >
-                View Current Crop
+                {t("fieldDetails.viewCurrentCrop")}
                 <ArrowRight size={14} />
               </button>
 
@@ -1508,14 +1505,11 @@ const FieldDetails = () => {
           <div className="fd2-current-crop-empty">
 
             <p>
-              No crop is currently growing or
-              planned on this field.
+              {t("fieldDetails.noCropGrowingOrPlanned")}
             </p>
 
             <span>
-              You can generate a recommendation
-              and start a new crop cycle when
-              you're ready.
+              {t("fieldDetails.startCropWhenReady")}
             </span>
 
           </div>
@@ -1531,24 +1525,24 @@ const FieldDetails = () => {
 
           <div>
             <span className="fd2-section-kicker">
-              FIELD WORKFLOW
+              {t("fieldDetails.fieldWorkflow")}
             </span>
 
             <h2>
-              From soil data to crop cycle
+              {t("fieldDetails.workflowTitle")}
             </h2>
           </div>
 
           <span className="fd2-workflow-count">
             {currentCropCycle
-              ? "Crop cycle in progress"
+              ? t("fieldDetails.cropCycleInProgress")
               : createdCycle
-              ? "3 of 3 completed"
+              ? t("fieldDetails.workflowCompleted")
               : selectedCrop
-              ? "2 of 3 completed"
+              ? t("fieldDetails.workflowTwoOfThree")
               : soilTest
-              ? "1 of 3 completed"
-              : "Start with soil testing"}
+              ? t("fieldDetails.workflowOneOfThree")
+              : t("fieldDetails.startWithSoilTesting")}
           </span>
 
         </div>
@@ -1572,11 +1566,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Soil Test
+                {t("fieldDetails.soilTest")}
               </strong>
 
               <span>
-                Record field condition
+               {t("fieldDetails.recordFieldCondition")}
               </span>
             </div>
           </div>
@@ -1607,11 +1601,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Crop Selection
+                {t("fieldDetails.cropSelection")}
               </strong>
 
               <span>
-                Find suitable crops
+                {t("fieldDetails.findSuitableCrops")}
               </span>
             </div>
           </div>
@@ -1642,11 +1636,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Crop Cycle
+                {t("fieldDetails.cropCycle")}
               </strong>
 
               <span>
-                Start crop journey
+               {t("fieldDetails.startCropJourney")}
               </span>
             </div>
           </div>
@@ -1663,16 +1657,15 @@ const FieldDetails = () => {
 
           <div>
             <span className="fd2-section-kicker">
-              STEP 1
+              {t("fieldDetails.step1")}
             </span>
 
             <h2>
-              Soil profile
+              {t("fieldDetails.soilProfile")}
             </h2>
 
             <p>
-              Keep the latest measured soil
-              values connected to this field.
+              {t("fieldDetails.soilProfileDescription")}
             </p>
           </div>
 
@@ -1685,7 +1678,7 @@ const FieldDetails = () => {
                   setShowSoilForm(true)
                 }
               >
-                Update Soil Test
+                {t("fieldDetails.updateSoilTest")}
               </button>
             )}
 
@@ -1701,17 +1694,16 @@ const FieldDetails = () => {
 
                   <div>
                     <span className="fd2-panel-kicker">
-                      LATEST TEST
+                      {t("fieldDetails.latestTest")}
                     </span>
 
                     <h3>
-                      Current soil values
+                      {t("fieldDetails.currentSoilValues")}
                     </h3>
                   </div>
 
                   <span className="fd2-source">
-                    {soilTest.source ||
-                      "manual"}
+                    {t(`fieldDetails.sourceTypes.${soilTest.source || "manual"}`)}
                   </span>
 
                 </div>
@@ -1729,7 +1721,7 @@ const FieldDetails = () => {
                     </strong>
 
                     <small>
-                      Nitrogen
+                      {t("fieldDetails.nitrogen")}
                     </small>
                   </div>
 
@@ -1744,7 +1736,7 @@ const FieldDetails = () => {
                     </strong>
 
                     <small>
-                      Phosphorus
+                      {t("fieldDetails.phosphorus")}
                     </small>
                   </div>
 
@@ -1759,7 +1751,7 @@ const FieldDetails = () => {
                     </strong>
 
                     <small>
-                      Potassium
+                      {t("fieldDetails.potassium")}
                     </small>
                   </div>
 
@@ -1774,7 +1766,7 @@ const FieldDetails = () => {
                     </strong>
 
                     <small>
-                      Acidity
+                      {t("fieldDetails.acidity")}
                     </small>
                   </div>
 
@@ -1788,14 +1780,14 @@ const FieldDetails = () => {
                     </strong>
 
                     <small>
-                      Moisture
+                      {t("fieldDetails.moisture")}
                     </small>
                   </div>
 
                 </div>
 
                 <div className="fd2-soil-meta">
-                  Tested on{" "}
+                  {t("fieldDetails.testedOn")}{" "}
                   <strong>
                     {formatDate(
                       soilTest.testedAt
@@ -1807,7 +1799,7 @@ const FieldDetails = () => {
                   <div className="fd2-soil-note">
 
                     <span>
-                      Notes
+                      {t("fieldDetails.notes")}
                     </span>
 
                     <p>
@@ -1825,13 +1817,11 @@ const FieldDetails = () => {
                 </div>
 
                 <h3>
-                  No soil test yet
+                  {t("fieldDetails.noSoilTest")}
                 </h3>
 
                 <p>
-                  Add N, P, K, pH and moisture
-                  values to unlock crop
-                  recommendations.
+                  {t("fieldDetails.addSoilValuesPrompt")}
                 </p>
 
               </div>
@@ -1846,11 +1836,11 @@ const FieldDetails = () => {
 
                 <div>
                   <span className="fd2-panel-kicker">
-                    SOIL INPUT
+                     {t("fieldDetails.soilInput")}
                   </span>
 
                   <h3>
-                    Enter test values
+                    {t("fieldDetails.enterTestValues")}
                   </h3>
                 </div>
 
@@ -1867,7 +1857,7 @@ const FieldDetails = () => {
 
                 <div className="fd2-field">
                   <label htmlFor="testedAt">
-                    Test date
+                    {t("fieldDetails.testDate")}
                   </label>
 
                   <input
@@ -1888,7 +1878,7 @@ const FieldDetails = () => {
 
                   <div className="fd2-field">
                     <label htmlFor="nitrogen">
-                      Nitrogen
+                      {t("fieldDetails.nitrogen")}
                     </label>
 
                     <input
@@ -1910,7 +1900,7 @@ const FieldDetails = () => {
 
                   <div className="fd2-field">
                     <label htmlFor="phosphorus">
-                      Phosphorus
+                      {t("fieldDetails.phosphorus")}
                     </label>
 
                     <input
@@ -1932,7 +1922,7 @@ const FieldDetails = () => {
 
                   <div className="fd2-field">
                     <label htmlFor="potassium">
-                      Potassium
+                      {t("fieldDetails.potassium")}
                     </label>
 
                     <input
@@ -1958,7 +1948,7 @@ const FieldDetails = () => {
 
                   <div className="fd2-field">
                     <label htmlFor="pH">
-                      pH
+                      {t("fieldDetails.ph")}
                     </label>
 
                     <input
@@ -1974,16 +1964,16 @@ const FieldDetails = () => {
                       onChange={
                         handleSoilChange
                       }
-                      placeholder="e.g. 6.8"
+                      placeholder={t("fieldDetails.phPlaceholder")}
                       required
                     />
                   </div>
 
                   <div className="fd2-field">
                     <label htmlFor="moisture">
-                      Moisture{" "}
+                      {t("fieldDetails.moisture")}{" "}
                       <span>
-                        optional
+                        {t("fieldDetails.optional")}
                       </span>
                     </label>
 
@@ -2007,7 +1997,7 @@ const FieldDetails = () => {
 
                 <div className="fd2-field">
                   <label htmlFor="source">
-                    Source
+                    {t("fieldDetails.source")}
                   </label>
 
                   <select
@@ -2021,24 +2011,24 @@ const FieldDetails = () => {
                     }
                   >
                     <option value="manual">
-                      Manual entry
+                      {t("fieldDetails.manualEntry")}
                     </option>
 
                     <option value="lab">
-                      Laboratory
+                      {t("fieldDetails.laboratory")}
                     </option>
 
                     <option value="sensor">
-                      Sensor
+                      {t("fieldDetails.sensor")}
                     </option>
                   </select>
                 </div>
 
                 <div className="fd2-field">
                   <label htmlFor="notes">
-                    Notes{" "}
+                    {t("fieldDetails.notes")}{" "}
                     <span>
-                      optional
+                      {t("fieldDetails.optional")}
                     </span>
                   </label>
 
@@ -2051,8 +2041,7 @@ const FieldDetails = () => {
                     onChange={
                       handleSoilChange
                     }
-                    placeholder="Add any useful soil-test notes..."
-                  />
+                    placeholder={t("fieldDetails.soilNotesPlaceholder")}                  />
                 </div>
 
                 <button
@@ -2066,12 +2055,12 @@ const FieldDetails = () => {
                         size={16}
                         className="fd2-spin"
                       />
-                      Saving...
+                      {t("fieldDetails.saving")}
                     </>
                   ) : (
                     <>
                       <Check size={16} />
-                      Save Soil Test
+                      {t("fieldDetails.saveSoilTest")}
                     </>
                   )}
                 </button>
@@ -2092,17 +2081,15 @@ const FieldDetails = () => {
 
           <div>
             <span className="fd2-section-kicker">
-              STEP 2
+              {t("fieldDetails.step2")}
             </span>
 
             <h2>
-              Crop recommendation
+              {t("fieldDetails.cropRecommendation")}
             </h2>
 
             <p>
-              Use the latest soil profile and
-              field context to generate suitable
-              crop candidates.
+              {t("fieldDetails.cropRecommendationDescription")}
             </p>
           </div>
 
@@ -2123,15 +2110,15 @@ const FieldDetails = () => {
                   size={16}
                   className="fd2-spin"
                 />
-                Analyzing...
+                {t("fieldDetails.analyzing")}
               </>
             ) : (
               <>
                 <Sprout size={16} />
 
                 {recommendations.length
-                  ? "Refresh Recommendation"
-                  : "Generate Recommendation"}
+                  ? t("fieldDetails.refreshRecommendation")
+                  : t("fieldDetails.generateRecommendation")}
               </>
             )}
           </button>
@@ -2147,13 +2134,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Soil test required
+                {t("fieldDetails.soilTestRequiredTitle")}
               </strong>
 
               <p>
-                Add your latest soil values
-                before generating crop
-                recommendations.
+                {t("fieldDetails.soilTestRequiredDescription")}
               </p>
             </div>
 
@@ -2167,11 +2152,11 @@ const FieldDetails = () => {
 
                 <div>
                   <span className="fd2-panel-kicker">
-                    FIELD CONDITIONS
+                    {t("fieldDetails.fieldConditions")}
                   </span>
 
                   <h3>
-                    Current weather
+                   {t("fieldDetails.currentWeather")}
                   </h3>
                 </div>
 
@@ -2184,12 +2169,12 @@ const FieldDetails = () => {
                 <div>
                   <span>
                     <Thermometer size={14} />
-                    Temperature
+                    {t("fieldDetails.temperature")}
                   </span>
 
                   <strong>
                     {weatherLoading
-                      ? "Loading..."
+                      ? t("fieldDetails.loading")
                       : weather?.temperature ??
                         "—"}
 
@@ -2203,12 +2188,12 @@ const FieldDetails = () => {
                 <div>
                   <span>
                     <Droplets size={14} />
-                    Humidity
+                    {t("fieldDetails.humidity")}
                   </span>
 
                   <strong>
                     {weatherLoading
-                      ? "Loading..."
+                      ? t("fieldDetails.loading")
                       : weather?.humidity ??
                         "—"}
 
@@ -2222,12 +2207,12 @@ const FieldDetails = () => {
                 <div>
                   <span>
                     <CloudRain size={14} />
-                    Rainfall
+                    {t("fieldDetails.rainfall")}
                   </span>
 
                   <strong>
                     {weatherLoading
-                      ? "Loading..."
+                      ? t("fieldDetails.loading")
                       : weather?.rainfall ??
                         "—"}
 
@@ -2245,7 +2230,7 @@ const FieldDetails = () => {
             <div className="fd2-top-pick">
 
               <span className="fd2-panel-kicker">
-                TOP MATCH
+                {t("fieldDetails.topMatch")}
               </span>
 
               <div className="fd2-top-pick-icon">
@@ -2262,8 +2247,8 @@ const FieldDetails = () => {
 
               <p>
                 {topCrop
-                  ? "Highest-ranked crop from the current recommendation."
-                  : "Generate a recommendation to see the best-ranked crop."}
+                  ? t("fieldDetails.topMatchDescription")
+                  : t("fieldDetails.topMatchEmpty")}
               </p>
 
               {topCrop && (
@@ -2278,8 +2263,12 @@ const FieldDetails = () => {
                   }}
                 >
                   {topLifecycleReady
-                    ? `${topLifecycleCrop.growthStages.length} growth stages • ${topLifecycleCrop.durationDays.min}–${topLifecycleCrop.durationDays.max} days`
-                    : "Lifecycle data unavailable for this crop."}
+                    ? t("fieldDetails.growthStagesDuration", {
+                        count: topLifecycleCrop.growthStages.length,
+                        min: topLifecycleCrop.durationDays.min,
+                        max: topLifecycleCrop.durationDays.max,
+                      })
+                    : t("fieldDetails.lifecycleUnavailableMessage")}
                 </div>
               )}
 
@@ -2318,9 +2307,9 @@ const FieldDetails = () => {
                   }
                 >
                   {!topLifecycleReady ? (
-                    "Lifecycle unavailable"
+                    t("fieldDetails.lifecycleUnavailable")
                   ) : currentCropCycle ? (
-                    "Cycle already exists"
+                    t("fieldDetails.cycleAlreadyExists")
                   ) : selectingCropId &&
                     String(
                       selectingCropId
@@ -2336,7 +2325,7 @@ const FieldDetails = () => {
                         size={13}
                         className="fd2-spin"
                       />
-                      Selecting...
+                      {t("fieldDetails.selecting")}
                     </>
                   ) : selectedCropId &&
                     String(
@@ -2350,11 +2339,11 @@ const FieldDetails = () => {
                       ) ? (
                     <>
                       <Check size={13} />
-                      Selected
+                      {t("fieldDetails.selected")}
                     </>
                   ) : (
                     <>
-                      Select Crop
+                      {t("fieldDetails.selectCrop")}
                       <ArrowRight
                         size={13}
                       />
@@ -2371,18 +2360,18 @@ const FieldDetails = () => {
 
                 <div>
                   <span className="fd2-panel-kicker">
-                    RANKED OPTIONS
+                    {t("fieldDetails.rankedOptions")}
                   </span>
 
                   <h3>
-                    Recommended crops
+                    {t("fieldDetails.recommendedCrops")}
                   </h3>
                 </div>
 
                 <span>
                   {cropResults.length
-                    ? `${cropResults.length} options`
-                    : "No results"}
+                    ? `${cropResults.length} ${t("fieldDetails.options")}`
+                    : t("fieldDetails.noResults")}
                 </span>
 
               </div>
@@ -2477,8 +2466,12 @@ const FieldDetails = () => {
                                 }}
                               >
                                 {lifecycleReady
-                                  ? `${lifecycleCrop.growthStages.length} growth stages • ${lifecycleCrop.durationDays.min}–${lifecycleCrop.durationDays.max} days`
-                                  : "Lifecycle data unavailable"}
+                                  ? t("fieldDetails.growthStagesDuration", {
+                                      count: lifecycleCrop.growthStages.length,
+                                      min: lifecycleCrop.durationDays.min,
+                                      max: lifecycleCrop.durationDays.max,
+                                    })
+                                  : t("fieldDetails.lifecycleUnavailable")}
                               </div>
 
                             </div>
@@ -2513,9 +2506,9 @@ const FieldDetails = () => {
                               }
                             >
                               {!lifecycleReady ? (
-                                "Lifecycle unavailable"
+                                t("fieldDetails.lifecycleUnavailable")
                               ) : currentCropCycle ? (
-                                "Cycle already exists"
+                                t("fieldDetails.cycleAlreadyExists")
                               ) : selectingCropId &&
                                 String(
                                   selectingCropId
@@ -2532,10 +2525,10 @@ const FieldDetails = () => {
                                   <Check
                                     size={12}
                                   />
-                                  Selected
+                                  {t("fieldDetails.selected")}
                                 </>
                               ) : (
-                                "Select"
+                                t("fieldDetails.select")
                               )}
                             </button>
 
@@ -2553,12 +2546,11 @@ const FieldDetails = () => {
                   </div>
 
                   <h3>
-                    No recommendations yet
+                    {t("fieldDetails.noRecommendations")}
                   </h3>
 
                   <p>
-                    Generate a recommendation
-                    after saving the soil test.
+                    {t("fieldDetails.generateRecommendationAfterSoilTest")}
                   </p>
 
                 </div>
@@ -2567,18 +2559,13 @@ const FieldDetails = () => {
               {recommendations.length > 0 &&
                 cropCatalog.length === 0 && (
                   <p className="fd2-score-note">
-                    Crop Master data is currently
-                    unavailable, so crop lifecycle
-                    actions are disabled.
+                    {t("fieldDetails.cropMasterUnavailable")}
                   </p>
                 )}
 
               {cropResults.length > 0 && (
                 <p className="fd2-score-note">
-                  Model score is a ranking signal
-                  returned by the crop prediction
-                  service, not a guaranteed crop
-                  success probability.
+                  {t("fieldDetails.modelScoreExplanation")}
                 </p>
               )}
 
@@ -2597,17 +2584,15 @@ const FieldDetails = () => {
 
           <div>
             <span className="fd2-section-kicker">
-              STEP 3
+              {t("fieldDetails.step3")}
             </span>
 
             <h2>
-              Start a crop cycle
+              {t("fieldDetails.startCropCycle")}
             </h2>
 
             <p>
-              Once you select a crop, create its
-              growing cycle and begin tracking
-              stages and tasks.
+              {t("fieldDetails.startCropCycleDescription")}
             </p>
           </div>
 
@@ -2622,17 +2607,23 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                {currentCycleStatus ===
-                "active"
-                  ? `${currentCropName || "This crop"} is already growing on this field`
-                  : `${currentCropName || "This crop"} is already planned for this field`}
+                {currentCycleStatus === "active"
+                ? t("fieldDetails.cropAlreadyGrowing", {
+                    cropName: currentCropName || t("fieldDetails.thisCrop"),
+                  })
+                : t("fieldDetails.cropAlreadyPlanned", {
+                    cropName: currentCropName || t("fieldDetails.thisCrop"),
+                  })}
               </strong>
 
               <p>
-                {currentCycleStatus ===
-                "active"
-                  ? `The field is currently in ${currentCycleStage.toLowerCase()}. Complete or cancel the current crop cycle before starting another one.`
-                  : "A planned crop cycle already exists on this field. Complete or cancel it before starting another one."}
+                {currentCycleStatus === "active"
+                ? t("fieldDetails.activeCycleDescription", {
+                    stage: t(`cropStages.${currentCycleStage}`, {
+                          defaultValue: currentCycleStage,
+                        }),
+                  })
+                : t("fieldDetails.plannedCycleDescription")}
               </p>
 
               <button
@@ -2654,7 +2645,7 @@ const FieldDetails = () => {
                   }
                 }}
               >
-                Open Current Crop Dashboard
+                {t("fieldDetails.openCurrentCropDashboard")}
                 <ArrowRight size={14} />
               </button>
             </div>
@@ -2669,12 +2660,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Select a crop first
+                {t("fieldDetails.selectCropFirst")}
               </strong>
 
               <p>
-                Choose one of the recommended
-                crops above to start a crop cycle.
+                {t("fieldDetails.selectCropFirstDescription")}
               </p>
             </div>
 
@@ -2688,13 +2678,11 @@ const FieldDetails = () => {
 
             <div>
               <strong>
-                Lifecycle data unavailable
+                {t("fieldDetails.lifecycleUnavailable")}
               </strong>
 
               <p>
-                This crop cannot start a crop cycle
-                until its duration and growth stages
-                are configured in the Crop Master.
+                {t("fieldDetails.lifecycleUnavailableDescription")}
               </p>
             </div>
 
@@ -2710,7 +2698,7 @@ const FieldDetails = () => {
 
               <div>
                 <span>
-                  SELECTED CROP
+                  {t("fieldDetails.selectedCrop")}
                 </span>
 
                 <strong>
@@ -2732,7 +2720,7 @@ const FieldDetails = () => {
 
               <div className="fd2-field">
                 <label htmlFor="startDate">
-                  Start date
+                  {t("fieldDetails.startDateLabel")}
                 </label>
 
                 <input
@@ -2751,9 +2739,9 @@ const FieldDetails = () => {
 
               <div className="fd2-field">
                 <label htmlFor="expectedHarvestDate">
-                  Expected harvest{" "}
+                  {t("fieldDetails.expectedHarvestLabel")}{" "}
                   <span>
-                    optional
+                    {t("fieldDetails.optional")}
                   </span>
                 </label>
 
@@ -2787,11 +2775,11 @@ const FieldDetails = () => {
                       size={15}
                       className="fd2-spin"
                     />
-                    Creating...
+                    {t("fieldDetails.creating")}
                   </>
                 ) : (
                   <>
-                    Start Crop Cycle
+                    {t("fieldDetails.startCropCycleButton")}
                     <ArrowRight
                       size={15}
                     />
@@ -2818,26 +2806,21 @@ const FieldDetails = () => {
           <div className="fd2-cycle-created-content">
 
             <span className="fd2-section-kicker">
-              CROP CYCLE CREATED
+               {t("fieldDetails.cropCycleCreated")}
             </span>
 
             <h2>
-              Your crop journey has started
+              {t("fieldDetails.cropJourneyStarted")}
             </h2>
 
             <p>
-              KrishiSphere created the crop cycle
-              and can now track its stages, tasks,
-              progress, weather, market context,
-              and AI guidance.
+              {t("fieldDetails.cropJourneyDescription")}
             </p>
 
             <div className="fd2-cycle-meta">
 
               <div>
-                <span>
-                  CROP
-                </span>
+                <span>{t("fieldDetails.cropLabel")}</span>
 
                 <strong>
                   {getCropName(
@@ -2848,9 +2831,7 @@ const FieldDetails = () => {
               </div>
 
               <div>
-                <span>
-                  START DATE
-                </span>
+                <span>{t("fieldDetails.startDateLabel")}</span>
 
                 <strong>
                   {formatDate(
@@ -2861,13 +2842,10 @@ const FieldDetails = () => {
               </div>
 
               <div>
-                <span>
-                  STATUS
-                </span>
+                <span>{t("fieldDetails.statusLabel")}</span>
 
                 <strong>
-                  {createdCycle?.status ||
-                    "planned"}
+                  {t(`cropCycle.status.${createdCycle?.status || "planned"}`)}
                 </strong>
               </div>
 
@@ -2893,7 +2871,7 @@ const FieldDetails = () => {
                 }
               }}
             >
-              Open Crop Dashboard
+              {t("fieldDetails.openCropDashboard")}
               <ArrowRight size={16} />
             </button>
 

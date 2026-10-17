@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertTriangle,
   ArrowRight,
@@ -12,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 
 import "./FarmAlerts.css";
+//import { useTranslation } from "react-i18next";
 
 const getEntityId = (entity) => {
   if (!entity) return null;
@@ -37,6 +39,7 @@ const getEntityId = (entity) => {
 
 const FarmAlerts = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [farmDashboard, setFarmDashboard] = useState(null);
@@ -101,17 +104,21 @@ const FarmAlerts = () => {
         result.push({
           id: `field-${getEntityId(field)}`,
           type: "field",
-          title: "Field needs attention",
+          title: t("farmAlerts.fieldNeedsAttention"),
           description:
-            field?.attentionReasons?.join(
-              " · "
-            ) ||
-            "Review this field.",
+            field?.attentionReasons
+              ?.map((reason) => {
+                if (reason === "No active crop cycle") {
+                  return t("farmAlerts.noActiveCropCycle");
+                }
+
+                return reason;
+              })
+              .join(" · ") || t("farmAlerts.reviewThisField"),
           fieldId:
             getEntityId(field),
           fieldName:
-            field?.name ||
-            "Unnamed field",
+            field?.name ||t("farmAlerts.unnamedField"),
         });
       });
 
@@ -126,25 +133,24 @@ const FarmAlerts = () => {
         result.push({
           id: `task-${getEntityId(task)}`,
           type: "task",
-          title: "Task due today",
+          title: t("farmAlerts.taskDueToday"),
           description:
-            task?.title ||
-            "Farm task needs attention.",
+            task?.title || t("farmAlerts.taskNeedsAttention"),
           cropCycleId:
             getEntityId(
               task?.cropCycleId
             ),
           fieldName:
             task?.field?.name ||
-            "Field",
+            t("farmAlerts.field"),
           cropName:
             task?.crop?.name ||
-            "Crop",
+            t("farmAlerts.crop"),
         });
       });
 
     return result;
-  }, [farmDashboard]);
+  }, [farmDashboard,t]);
 
   const alertCount = alerts.length;
 
@@ -182,11 +188,13 @@ const FarmAlerts = () => {
         onClick={() =>
           setOpen((value) => !value)
         }
-        aria-label={`Farm alerts${
+        aria-label={
           alertCount
-            ? `, ${alertCount} alerts`
-            : ""
-        }`}
+            ? t("farmAlerts.triggerWithCount", {
+                count: alertCount,
+              })
+            : t("farmAlerts.heading")
+        }
         aria-expanded={open}
       >
         <Bell size={19} />
@@ -214,17 +222,15 @@ const FarmAlerts = () => {
             <div className="farm-alert-header">
               <div>
                 <span>
-                  FARM ALERTS
+                  {t("farmAlerts.heading")}
                 </span>
 
                 <h3>
                   {alertCount > 0
-                    ? `${alertCount} item${
-                        alertCount === 1
-                          ? ""
-                          : "s"
-                      } need your attention`
-                    : "Everything looks clear"}
+                    ? t("farmAlerts.itemsNeedAttention", {
+                        count: alertCount,
+                      })
+                    : t("farmAlerts.everythingLooksClear")}
                 </h3>
               </div>
 
@@ -234,7 +240,7 @@ const FarmAlerts = () => {
                 onClick={() =>
                   setOpen(false)
                 }
-                aria-label="Close alerts"
+                aria-label={t("farmAlerts.closeAlerts")}
               >
                 <X size={16} />
               </button>
@@ -242,7 +248,7 @@ const FarmAlerts = () => {
 
             {loading ? (
               <div className="farm-alert-empty">
-                Loading alerts...
+                {t("farmAlerts.loading")}
               </div>
             ) : alerts.length > 0 ? (
               <div className="farm-alert-list">
@@ -285,8 +291,7 @@ const FarmAlerts = () => {
                       </span>
 
                       <small>
-                        {alert.type ===
-                        "field"
+                        {alert.type === "field"
                           ? alert.fieldName
                           : `${alert.fieldName} · ${alert.cropName}`}
                       </small>
@@ -309,12 +314,11 @@ const FarmAlerts = () => {
                 </div>
 
                 <strong>
-                  No urgent farm alerts
+                  {t("farmAlerts.noUrgentAlerts")}
                 </strong>
 
                 <span>
-                  Your fields and today's
-                  tasks are currently clear.
+                  {t("farmAlerts.allClearDescription")}
                 </span>
               </div>
             )}
