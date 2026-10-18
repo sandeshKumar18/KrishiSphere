@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Link,
   Navigate,
@@ -9,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import "./Auth.css";
 
 const Login = () => {
+  const { t } = useTranslation();
   const {
     login,
     user,
@@ -33,7 +35,7 @@ const Login = () => {
     return (
       <div className="auth-loading">
         <div className="auth-spinner" />
-        <p>Loading KrishiSphere...</p>
+        <p>{t("auth.loading")}</p>
       </div>
     );
   }
@@ -50,7 +52,7 @@ const Login = () => {
     const cleanEmail = email.trim().toLowerCase();
 
     if (!cleanEmail || !password) {
-      setError("Please enter your email and password.");
+      setError(t("auth.emailPasswordRequired"));
       return;
     }
 
@@ -62,7 +64,7 @@ const Login = () => {
     } catch (error) {
       setError(
         error?.message ||
-          "Unable to login. Please try again."
+          t("auth.loginFailed")
       );
     } finally {
       setLoading(false);
@@ -81,25 +83,23 @@ const Login = () => {
 
             <div>
               <h1>KrishiSphere</h1>
-              <span>Smart farming, simplified.</span>
+              <span>{t("auth.tagline")}</span>
             </div>
           </div>
 
           <div className="auth-hero-content">
             <p className="auth-eyebrow">
-              YOUR DIGITAL FARM COMPANION
+              {t("auth.heroEyebrow")}
             </p>
 
             <h2>
-              Manage your farm.
+             {t("auth.heroTitleLine1")}
               <br />
-              Grow with confidence.
+              {t("auth.heroTitleLine2")}
             </h2>
 
             <p>
-              Keep your fields, crop cycles, market
-              information and farming decisions in one
-              connected platform.
+              <p>{t("auth.heroDescription")}</p>
             </p>
           </div>
 
@@ -107,24 +107,24 @@ const Login = () => {
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>Manage fields</strong>
-                <p>Keep your farm records organized.</p>
+                <strong>{t("auth.features.fields.title")}</strong>
+                <p>{t("auth.features.fields.description")}</p>
               </div>
             </div>
 
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>Track crop cycles</strong>
-                <p>Follow every crop from planning to harvest.</p>
+                <strong>{t("auth.features.cropCycles.title")}</strong>
+                <p>{t("auth.features.cropCycles.description")}</p>
               </div>
             </div>
 
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>Make better decisions</strong>
-                <p>Bring your farming information together.</p>
+                <strong>{t("auth.features.decisions.title")}</strong>
+                <p>{t("auth.features.decisions.description")}</p>
               </div>
             </div>
           </div>
@@ -140,20 +140,18 @@ const Login = () => {
 
               <div>
                 <h1>KrishiSphere</h1>
-                <span>Smart farming, simplified.</span>
+                <span>{t("auth.tagline")}</span>
               </div>
             </div>
 
             <div className="auth-heading">
               <p className="auth-eyebrow">
-                WELCOME BACK
+                {t("auth.welcomeBack")}
               </p>
 
-              <h2>Sign in to your farm</h2>
+              <h2>{t("auth.signInTitle")}</h2>
 
-              <p>
-                Continue managing your farm with KrishiSphere.
-              </p>
+              <p>{t("auth.signInDescription")}</p>
             </div>
 
             {error && (
@@ -169,13 +167,13 @@ const Login = () => {
             >
               <div className="auth-field">
                 <label htmlFor="login-email">
-                  Email address
+                  {t("auth.emailLabel")}
                 </label>
 
                 <input
                   id="login-email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("auth.emailPlaceholder")}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -189,14 +187,14 @@ const Login = () => {
               <div className="auth-field">
                 <div className="auth-label-row">
                   <label htmlFor="login-password">
-                    Password
+                    {t("auth.passwordLabel")}
                   </label>
                 </div>
 
                 <input
                   id="login-password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t("auth.passwordPlaceholder")}
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -215,23 +213,23 @@ const Login = () => {
                 {loading ? (
                   <>
                     <span className="button-spinner" />
-                    Signing in...
+                    {t("auth.signingIn")}
                   </>
                 ) : (
-                  "Sign in"
+                  t("auth.signIn")
                 )}
               </button>
             </form>
 
             <div className="auth-divider">
-              <span>New to KrishiSphere?</span>
+              <span>{t("auth.newToKrishiSphere")}</span>
             </div>
 
             <Link
               to="/signup"
               className="auth-secondary-button"
             >
-              Create your account
+               {t("auth.createAccount")}
             </Link>
 
           </div>

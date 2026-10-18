@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Link,
   Navigate,
@@ -9,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import "./Auth.css";
 
 const Signup = () => {
+  const { t } = useTranslation();
   const {
     register,
     user,
@@ -40,7 +42,7 @@ const Signup = () => {
     return (
       <div className="auth-loading">
         <div className="auth-spinner" />
-        <p>Loading KrishiSphere...</p>
+        <p>{t("auth.loading")}</p>
       </div>
     );
   }
@@ -72,21 +74,17 @@ const Signup = () => {
     const district = form.district.trim();
 
     if (!name || !email || !form.password) {
-      setError(
-        "Name, email and password are required."
-      );
+      setError(t("auth.signupRequiredFields"));
       return;
     }
 
     if (form.password.length < 6) {
-      setError(
-        "Password should be at least 6 characters."
-      );
+      setError(t("auth.passwordTooShort"));
       return;
     }
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("auth.passwordsDoNotMatch"));
       return;
     }
 
@@ -107,8 +105,11 @@ const Signup = () => {
       navigate("/", { replace: true });
     } catch (error) {
       setError(
-        error?.message ||
-          "Unable to create your account."
+        t(
+          error?.message === "User already exists"
+            ? "auth.userAlreadyExists"
+            : "auth.signupFailed"
+        )
       );
     } finally {
       setLoading(false);
@@ -127,50 +128,46 @@ const Signup = () => {
 
             <div>
               <h1>KrishiSphere</h1>
-              <span>Smart farming, simplified.</span>
+              <span>{t("auth.tagline")}</span>
             </div>
           </div>
 
           <div className="auth-hero-content">
             <p className="auth-eyebrow">
-              BUILD YOUR FARM PROFILE
+              {t("auth.signupHeroEyebrow")}
             </p>
 
             <h2>
-              Everything your farm
+              {t("auth.signupHeroTitleLine1")}
               <br />
-              needs, in one place.
+             {t("auth.signupHeroTitleLine2")}
             </h2>
 
-            <p>
-              Create your account once and keep your
-              fields, crops and farming activities organized
-              from one dashboard.
-            </p>
+            <p>{t("auth.signupHeroDescription")}</p>
           </div>
 
           <div className="auth-feature-list">
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>One farm profile</strong>
-                <p>Keep your basic information together.</p>
+                <strong>{t("auth.signupFeatures.profile.title")}</strong>
+                <p>{t("auth.signupFeatures.profile.description")}</p>
               </div>
             </div>
 
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>Personalized workspace</strong>
-                <p>Build your farm management system your way.</p>
+                <strong>{t("auth.signupFeatures.workspace.title")}</strong>
+                <p>{t("auth.signupFeatures.workspace.description")}</p>
               </div>
             </div>
 
             <div className="auth-feature">
               <span>✓</span>
               <div>
-                <strong>Ready to get started</strong>
-                <p>Register once and enter your dashboard.</p>
+                <strong>{t("auth.signupFeatures.getStarted.title")}</strong>
+                <p>{t("auth.signupFeatures.getStarted.description")}</p>
               </div>
             </div>
           </div>
@@ -186,21 +183,18 @@ const Signup = () => {
 
               <div>
                 <h1>KrishiSphere</h1>
-                <span>Smart farming, simplified.</span>
+                <span>{t("auth.tagline")}</span>
               </div>
             </div>
 
             <div className="auth-heading">
               <p className="auth-eyebrow">
-                GET STARTED
+                {t("auth.signupWelcome")}
               </p>
 
-              <h2>Create your account</h2>
+              <h2>{t("auth.signupTitle")}</h2>
 
-              <p>
-                Set up your farmer profile to enter
-                KrishiSphere.
-              </p>
+              <p>{t("auth.signupDescription")}</p>
             </div>
 
             {error && (
@@ -216,14 +210,14 @@ const Signup = () => {
             >
               <div className="auth-field">
                 <label htmlFor="signup-name">
-                  Full name
+                  {t("auth.fullNameLabel")}
                 </label>
 
                 <input
                   id="signup-name"
                   name="name"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder={t("auth.fullNamePlaceholder")}
                   value={form.name}
                   onChange={handleChange}
                   autoComplete="name"
@@ -234,14 +228,14 @@ const Signup = () => {
               <div className="auth-form-grid">
                 <div className="auth-field">
                   <label htmlFor="signup-email">
-                    Email address
+                    {t("auth.emailLabel")}
                   </label>
 
                   <input
                     id="signup-email"
                     name="email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder={t("auth.emailPlaceholder")}
                     value={form.email}
                     onChange={handleChange}
                     autoComplete="email"
@@ -251,14 +245,14 @@ const Signup = () => {
 
                 <div className="auth-field">
                   <label htmlFor="signup-phone">
-                    Phone
+                    {t("auth.phoneLabel")}
                   </label>
 
                   <input
                     id="signup-phone"
                     name="phone"
                     type="tel"
-                    placeholder="Optional"
+                    placeholder={t("auth.optionalPlaceholder")}
                     value={form.phone}
                     onChange={handleChange}
                     autoComplete="tel"
@@ -269,14 +263,14 @@ const Signup = () => {
               <div className="auth-form-grid">
                 <div className="auth-field">
                   <label htmlFor="signup-state">
-                    State
+                    {t("auth.stateLabel")}
                   </label>
 
                   <input
                     id="signup-state"
                     name="state"
                     type="text"
-                    placeholder="Optional"
+                    placeholder={t("auth.optionalPlaceholder")}
                     value={form.state}
                     onChange={handleChange}
                     autoComplete="address-level1"
@@ -285,14 +279,14 @@ const Signup = () => {
 
                 <div className="auth-field">
                   <label htmlFor="signup-district">
-                    District
+                    {t("auth.districtLabel")}
                   </label>
 
                   <input
                     id="signup-district"
                     name="district"
                     type="text"
-                    placeholder="Optional"
+                    placeholder={t("auth.optionalPlaceholder")}
                     value={form.district}
                     onChange={handleChange}
                   />
@@ -302,14 +296,14 @@ const Signup = () => {
               <div className="auth-form-grid">
                 <div className="auth-field">
                   <label htmlFor="signup-password">
-                    Password
+                    {t("auth.passwordLabel")}
                   </label>
 
                   <input
                     id="signup-password"
                     name="password"
                     type="password"
-                    placeholder="At least 6 characters"
+                    placeholder={t("auth.passwordMinPlaceholder")}
                     value={form.password}
                     onChange={handleChange}
                     autoComplete="new-password"
@@ -319,14 +313,14 @@ const Signup = () => {
 
                 <div className="auth-field">
                   <label htmlFor="signup-confirm-password">
-                    Confirm password
+                    {t("auth.confirmPasswordLabel")}
                   </label>
 
                   <input
                     id="signup-confirm-password"
                     name="confirmPassword"
                     type="password"
-                    placeholder="Repeat password"
+                    placeholder={t("auth.confirmPasswordPlaceholder")}
                     value={form.confirmPassword}
                     onChange={handleChange}
                     autoComplete="new-password"
@@ -343,18 +337,18 @@ const Signup = () => {
                 {loading ? (
                   <>
                     <span className="button-spinner" />
-                    Creating account...
+                    {t("auth.creatingAccount")}
                   </>
                 ) : (
-                  "Create account"
+                  t("auth.createAccount")
                 )}
               </button>
             </form>
 
             <div className="auth-bottom-text">
-              Already have an account?{" "}
+              {t("auth.alreadyHaveAccount")}{" "}
               <Link to="/login">
-                Sign in
+                {t("auth.signIn")}
               </Link>
             </div>
 

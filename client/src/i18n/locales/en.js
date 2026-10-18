@@ -776,6 +776,178 @@ const en = {
       fieldNotFound: "Field not found",
       fieldNotFoundDescription: "We could not find this field or it may no longer be available.",
     },
+
+    guidance: {
+      steps: {
+        profile: {
+          title: "Complete your profile",
+          description:
+            "Add your basic information so KrishiSphere can keep your farming workspace organized.",
+        },
+        field: {
+          title: "Add your field",
+          description:
+            "Create a field and record the important details about the land you want to manage.",
+        },
+        cropCycle: {
+          title: "Start a crop cycle",
+          description:
+            "Choose the crop and create a crop cycle so you can track the crop throughout its journey.",
+        },
+        manageCrop: {
+          title: "Manage your crop",
+          description:
+            "Use your crop cycle workspace to keep important farming activities and information together.",
+        },
+        marketGuidance: {
+          title: "Use market & guidance tools",
+          description:
+            "Check market information, crop information and AI-based advice whenever you need help.",
+        },
+      },
+      hero: {
+        eyebrow: "KRISHISPHERE GUIDE",
+        titleLine1: "Everything you need,",
+        titleLine2: "explained simply.",
+        description:"New to KrishiSphere? Start here. This guide explains what each section does and how the different parts of your farm workflow connect.",
+        firstTimeTitle: "First time here?",
+        firstTimeDescription:"Follow the workflow below from top to bottom. You do not need to use every section immediately.",
+      },
+      workflow: {
+        eyebrow: "GETTING STARTED",
+        title: "How KrishiSphere works",
+        description:"Think of KrishiSphere as a connected farming workspace. Each step builds on the previous one.",
+      },
+      modules: {
+        eyebrow: "APP OVERVIEW",
+        title: "What does each section do?",
+        items: {
+          dashboard: {
+            title: "Dashboard",
+            description: "Your main overview of the KrishiSphere workspace.",
+          },
+          fields: {
+            title: "Fields",
+            description: "Create and manage the fields you want to track.",
+          },
+          cropCycles: {
+            title: "Crop Cycles",
+            description: "Track the journey of individual crops from planning onward.",
+          },
+          market: {
+            title: "Market",
+            description: "View market-related information available in the application.",
+          },
+          aiAdvice: {
+            title: "AI Advice",
+            description: "Use the AI guidance section when you need farming-related assistance.",
+          },
+          cropCatalog: {
+            title: "Crop Catalog",
+            description: "Explore crop-related information available in KrishiSphere.",
+          },
+          governmentSchemes: {
+            title: "Government Schemes",
+            description: "Find information about government farming schemes.",
+          },
+          settings: {
+            title: "Settings",
+            description: "Manage your profile and application preferences.",
+          },
+        },
+      },
+      journey: {
+        eyebrow: "YOUR FARM JOURNEY",
+        title: "One simple workflow",
+        profile: "Profile",
+        profileDescription: "Tell us about yourself",
+        field: "Field",
+        fieldDescription: "Add your land",
+        cropCycle: "Crop Cycle",
+        cropCycleDescription: "Start growing",
+        manage: "Manage",
+        manageDescription: "Track progress",
+        decide: "Decide",
+        decideDescription: "Market & advice",
+      },
+      tips: {
+        eyebrow: "QUICK TIP",
+        title: "You do not need to complete everything at once.",
+        description: "Start with your profile and first field. As you continue using KrishiSphere, add crop cycles and explore the other sections when they become useful.",
+      },
+    },
+    auth: {
+      loading: "Loading KrishiSphere...",
+      tagline: "Smart farming, simplified.",
+      heroEyebrow: "YOUR DIGITAL FARM COMPANION",
+      heroTitleLine1: "Manage your farm.",
+      heroTitleLine2: "Grow with confidence.",
+      heroDescription:"Keep your fields, crop cycles, market information and farming decisions in one connected platform.",
+      features: {
+        fields: {
+          title: "Manage fields",
+          description: "Keep your farm records organized.",
+        },
+        cropCycles: {
+          title: "Track crop cycles",
+          description: "Follow every crop from planning to harvest.",
+        },
+        decisions: {
+          title: "Make better decisions",
+          description: "Bring your farming information together.",
+        },
+      },
+      welcomeBack: "WELCOME BACK",
+      signInTitle: "Sign in to your farm",
+      signInDescription:  "Continue managing your farm with KrishiSphere.",
+      emailLabel: "Email address",
+      emailPlaceholder: "you@example.com",  
+      passwordLabel: "Password",
+      passwordPlaceholder: "Enter your password",
+      signingIn: "Signing in...",
+      signIn: "Sign in",
+      newToKrishiSphere: "New to KrishiSphere?",
+      createAccount: "Create your account",
+      emailPasswordRequired: "Please enter your email and password.",
+      loginFailed: "Unable to login. Please try again.",
+      signupHeroEyebrow: "BUILD YOUR FARM PROFILE",
+      signupHeroTitleLine1: "Everything your farm",
+      signupHeroTitleLine2: "needs, in one place.",
+      signupHeroDescription:"Create your account once and keep your fields, crops and farming activities organized from one dashboard.",
+      signupFeatures: {
+        profile: {
+          title: "One farm profile",
+          description: "Keep your basic information together.",
+        },
+        workspace: {
+          title: "Personalized workspace",
+          description: "Build your farm management system your way.",
+        },
+        getStarted: {
+          title: "Ready to get started",
+          description: "Register once and enter your dashboard.",
+        },
+      },
+      signupWelcome: "GET STARTED",
+      signupTitle: "Create your account",
+      signupDescription:"Set up your farmer profile to enter KrishiSphere.",
+      fullNameLabel: "Full name",
+      fullNamePlaceholder: "Enter your full name",
+      phoneLabel: "Phone",
+      optionalPlaceholder: "Optional",
+      stateLabel: "State",
+      districtLabel: "District",
+      passwordMinPlaceholder: "At least 6 characters",
+      confirmPasswordLabel: "Confirm password",
+      confirmPasswordPlaceholder: "Repeat password",
+      creatingAccount: "Creating account...",
+      alreadyHaveAccount: "Already have an account?",
+      signupRequiredFields: "Name, email and password are required.",
+      passwordTooShort: "Password should be at least 6 characters.",
+      passwordsDoNotMatch: "Passwords do not match.",
+      signupFailed: "Unable to create your account.",
+      userAlreadyExists: "User already exists. Please sign in instead.",
+    },
   },
 };
 

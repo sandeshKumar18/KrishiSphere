@@ -770,6 +770,181 @@ const hi = {
       fieldNotFound: "खेत नहीं मिला",
       fieldNotFoundDescription: "हमें यह खेत नहीं मिला या यह अब उपलब्ध नहीं है।",
     },
+
+    guidance: {
+      steps: {
+        profile: {
+          title: "अपनी प्रोफ़ाइल पूरी करें",
+          description:
+            "अपनी बुनियादी जानकारी जोड़ें, ताकि KrishiSphere आपके खेती से जुड़े कार्यों को व्यवस्थित रख सके।",
+        },
+        field: {
+          title: "अपना खेत जोड़ें",
+          description:
+            "एक खेत बनाएँ और उस ज़मीन की ज़रूरी जानकारी दर्ज करें, जिसका आप प्रबंधन करना चाहते हैं।",
+        },
+        cropCycle: {
+          title: "फसल चक्र शुरू करें",
+          description:
+            "फसल चुनें और उसका फसल चक्र बनाएँ, ताकि आप उसकी पूरी प्रक्रिया को ट्रैक कर सकें।",
+        },
+        manageCrop: {
+          title: "अपनी फसल का प्रबंधन करें",
+          description:
+            "खेती की ज़रूरी गतिविधियों और जानकारी को एक जगह रखने के लिए अपने फसल चक्र का उपयोग करें।",
+        },
+        marketGuidance: {
+          title: "बाज़ार और मार्गदर्शन टूल का उपयोग करें",
+          description:
+            "ज़रूरत पड़ने पर बाज़ार की जानकारी, फसलों की जानकारी और AI-आधारित सलाह देखें।",
+        },
+      },
+
+      hero: {
+        eyebrow: "KRISHISPHERE गाइड",
+        titleLine1: "आपकी ज़रूरत की हर जानकारी,",
+        titleLine2: "आसान भाषा में।",
+        description:"KrishiSphere पर नए हैं? यहाँ से शुरुआत करें। यह गाइड बताती है कि हर सेक्शन क्या करता है और खेती के अलग-अलग कार्य एक-दूसरे से कैसे जुड़े हैं।",
+        firstTimeTitle: "पहली बार आए हैं?",
+        firstTimeDescription:  "नीचे दिए गए चरणों को क्रम से अपनाएँ। आपको सभी सेक्शन का उपयोग एक साथ शुरू करने की ज़रूरत नहीं है।",
+      },
+      workflow: {
+        eyebrow: "शुरुआत करें",
+        title: "KrishiSphere कैसे काम करता है",
+        description:"KrishiSphere को खेती से जुड़े कार्यों के लिए एक एकीकृत प्लेटफ़ॉर्म समझें। हर चरण पिछले चरण पर आधारित होता है।",
+      },
+      modules: {
+        eyebrow: "ऐप का परिचय",
+        title: "हर सेक्शन क्या करता है?",
+        items: {
+          dashboard: {
+            title: "डैशबोर्ड",
+            description: "KrishiSphere के मुख्य पेज पर अपने खेती से जुड़े कार्यों का अवलोकन करें।",
+          },
+          fields: {
+            title: "खेत",
+            description: "जिन खेतों को ट्रैक करना चाहते हैं, उन्हें बनाएँ और प्रबंधित करें।",
+          },
+          cropCycles: {
+            title: "फसल चक्र",
+            description: "योजना बनाने से लेकर आगे की प्रक्रिया तक, प्रत्येक फसल की प्रगति ट्रैक करें।",
+          },
+          market: {
+            title: "बाज़ार",
+            description: "ऐप में उपलब्ध बाज़ार से संबंधित जानकारी देखें।",
+          },
+          aiAdvice: {
+            title: "AI सलाह",
+            description: "खेती से जुड़ी सहायता के लिए AI मार्गदर्शन सेक्शन का उपयोग करें।",
+          },
+          cropCatalog: {
+            title: "फसल सूची",
+            description: "KrishiSphere में उपलब्ध फसलों से संबंधित जानकारी देखें।",
+          },
+          governmentSchemes: {
+            title: "सरकारी योजनाएँ",
+            description: "खेती से जुड़ी सरकारी योजनाओं की जानकारी प्राप्त करें।",
+          },
+          settings: {
+            title: "सेटिंग्स",
+            description: "अपनी प्रोफ़ाइल और ऐप की प्राथमिकताएँ प्रबंधित करें।",
+          },
+        },
+      },
+      journey: {
+        eyebrow: "आपकी खेती की यात्रा",
+        title: "एक आसान कार्यप्रणाली",
+        profile: "प्रोफ़ाइल",
+        profileDescription: "अपने बारे में बताएँ",
+        field: "खेत",
+        fieldDescription: "अपनी ज़मीन जोड़ें",
+        cropCycle: "फसल चक्र",
+        cropCycleDescription: "खेती शुरू करें",
+        manage: "प्रबंधन",
+        manageDescription: "प्रगति ट्रैक करें",
+        decide: "निर्णय लें",
+        decideDescription: "बाज़ार और सलाह",
+      },
+      tips: {
+        eyebrow: "उपयोगी सुझाव",
+        title: "आपको सब कुछ एक साथ पूरा करने की ज़रूरत नहीं है।",
+        description:"अपनी प्रोफ़ाइल और पहला खेत जोड़ने से शुरुआत करें। KrishiSphere का उपयोग करते हुए, ज़रूरत के अनुसार फसल चक्र जोड़ें और अन्य सेक्शन देखें।",
+      },
+    },
+
+    auth: {
+      loading: "KrishiSphere लोड हो रहा है...",
+      tagline: "स्मार्ट खेती, अब आसान।",
+      heroEyebrow: "आपका डिजिटल कृषि साथी",
+      heroTitleLine1: "अपने खेत का प्रबंधन करें।",
+      heroTitleLine2: "आत्मविश्वास के साथ आगे बढ़ें।",
+      heroDescription:"अपने खेतों, फसल चक्रों, बाज़ार की जानकारी और खेती से जुड़े निर्णयों को एक ही प्लेटफ़ॉर्म पर व्यवस्थित रखें।",
+      features: {
+        fields: {
+          title: "खेतों का प्रबंधन करें",
+          description: "अपने खेत का रिकॉर्ड व्यवस्थित रखें।",
+        },
+        cropCycles: {
+          title: "फसल चक्र पर नज़र रखें",
+          description: "योजना बनाने से लेकर कटाई तक हर फसल की प्रगति देखें।",
+        },
+        decisions: {
+          title: "बेहतर निर्णय लें",
+          description: "खेती से जुड़ी सभी जानकारियों को एक साथ रखें।",
+        },
+      },
+      welcomeBack: "वापसी पर स्वागत है",
+      signInTitle: "अपने खेत में साइन इन करें",
+      signInDescription:"KrishiSphere के साथ अपने खेत का प्रबंधन जारी रखें।",
+      emailLabel: "ईमेल पता",
+      emailPlaceholder: "you@example.com",
+      passwordLabel: "पासवर्ड",
+      passwordPlaceholder: "अपना पासवर्ड दर्ज करें",
+      signingIn: "साइन इन हो रहा है...",
+      signIn: "साइन इन करें",
+      newToKrishiSphere: "KrishiSphere पर नए हैं?",
+      createAccount: "अपना खाता बनाएँ",
+      emailPasswordRequired: "कृपया अपना ईमेल और पासवर्ड दर्ज करें।",
+      loginFailed: "लॉगिन नहीं हो सका। कृपया फिर से प्रयास करें।",
+      signupHeroEyebrow: "अपनी खेती की प्रोफ़ाइल बनाएँ",
+      signupHeroTitleLine1: "आपके खेत की हर ज़रूरत",
+      signupHeroTitleLine2: "अब एक ही जगह पर।",
+      signupHeroDescription:"एक बार अपना खाता बनाएँ और एक ही डैशबोर्ड से अपने खेतों, फसलों और खेती की गतिविधियों को व्यवस्थित रखें।",
+      signupFeatures: {
+        profile: {
+          title: "एक ही कृषि प्रोफ़ाइल",
+          description: "अपनी ज़रूरी जानकारी एक ही जगह रखें।",
+        },
+        workspace: {
+          title: "आपके अनुसार कार्यक्षेत्र",
+          description: "अपने तरीके से खेती प्रबंधन प्रणाली बनाएँ।",
+        },
+        getStarted: {
+          title: "शुरू करने के लिए तैयार",
+          description: "एक बार पंजीकरण करें और अपने डैशबोर्ड पर जाएँ।",
+        },
+
+      },
+      signupWelcome: "शुरू करें",
+      signupTitle: "अपना खाता बनाएँ",
+      signupDescription:"KrishiSphere में प्रवेश करने के लिए अपनी किसान प्रोफ़ाइल बनाएँ।",
+      fullNameLabel: "पूरा नाम",
+      fullNamePlaceholder: "अपना पूरा नाम दर्ज करें",
+      phoneLabel: "फ़ोन नंबर",
+      optionalPlaceholder: "वैकल्पिक",
+      stateLabel: "राज्य",
+      districtLabel: "ज़िला",
+      passwordMinPlaceholder: "कम से कम 6 अक्षर",
+      confirmPasswordLabel: "पासवर्ड की पुष्टि करें",
+      confirmPasswordPlaceholder: "पासवर्ड दोबारा दर्ज करें",
+      creatingAccount: "खाता बनाया जा रहा है...",
+      alreadyHaveAccount: "क्या आपका पहले से खाता है?",
+      signupRequiredFields: "नाम, ईमेल और पासवर्ड दर्ज करना आवश्यक है।",
+      passwordTooShort: "पासवर्ड में कम से कम 6 अक्षर होने चाहिए।",
+      passwordsDoNotMatch: "दोनों पासवर्ड मेल नहीं खाते।",
+      signupFailed: "आपका खाता नहीं बन सका। कृपया फिर से प्रयास करें।",
+      userAlreadyExists: "यह खाता पहले से मौजूद है। कृपया साइन इन करें।",
+    },
   },
 };
 
