@@ -636,20 +636,19 @@ const Dashboard = () => {
 
     if (isCompleted) {
       return {
-        title: "Review the completed crop cycle",
-        description:
-          "View the crop journey, completed tasks and recorded results.",
-        label: "Open Crop Dashboard",
+        title: t("dashboard.completedCycle.title"),
+        description: t("dashboard.completedCycle.description"),
+        label: t("dashboard.currentTask.openDashboard"),
         path: cropDashboardPath,
       };
     }
 
     if (currentStageTasks.length === 0) {
       return {
-        title: "Set up the current stage task",
-        description:
-          `No task is currently recorded for ${currentStage?.name || "this stage"}.`,
-        label: "Open Crop Dashboard",
+        title: t("dashboard.noStageTasks.title"),
+        description: t("dashboard.noStageTasks.description", {
+          stage: currentStage?.name ||t("dashboard.currentTask.currentStage"),}),
+        label: t("dashboard.currentTask.openDashboard"),
         path: cropDashboardPath,
       };
     }
@@ -661,32 +660,30 @@ const Dashboard = () => {
 
     if (incompleteCurrentTasks.length > 0) {
       return {
-        title: "Complete your current crop task",
+        title: t("dashboard.currentTask.title"),
         description:
           incompleteCurrentTasks.length === 1
             ? incompleteCurrentTasks[0]?.title ||
-              "Finish the current crop task."
-            : `${incompleteCurrentTasks.length} tasks are still pending for ${currentStage?.name || "the current stage"}.`,
-        label: "Open Crop Dashboard",
+              t("dashboard.currentTask.finishTask")
+            : t("dashboard.currentTask.pendingTasks", { count: incompleteCurrentTasks.length, stage: currentStage?.name || t("dashboard.currentTask.currentStage"),}),
+        label: t("dashboard.currentTask.openDashboard"),
         path: cropDashboardPath,
       };
     }
 
     if (nextStage) {
       return {
-        title: `Move to ${nextStage.name}`,
-        description:
-          "The current stage is complete. Continue the crop journey from the crop dashboard.",
-        label: "Continue Crop Cycle",
+        title: t("dashboard.nextStage.title", {stage: nextStage.name,}),
+        description: t("dashboard.nextStage.description"),
+        label: t("dashboard.nextStage.label"),
         path: cropDashboardPath,
       };
     }
 
     return {
-      title: "Complete the crop cycle",
-      description:
-        "All stages and tasks are complete. Review the final cycle before closing it.",
-      label: "Open Crop Dashboard",
+      title: t("dashboard.cycleComplete.title"),
+      description: t("dashboard.cycleComplete.description"),
+      label: t("dashboard.currentTask.openDashboard"),
       path: cropDashboardPath,
     };
   }, [
@@ -708,8 +705,8 @@ const Dashboard = () => {
           <Sprout size={25} />
         </div>
         <div>
-          <strong>Loading your farm</strong>
-          <span>Preparing today&apos;s overview...</span>
+          <strong>{t("dashboard.loading.title")}</strong>
+          <span>{t("dashboard.loading.description")}</span>
         </div>
       </div>
     );

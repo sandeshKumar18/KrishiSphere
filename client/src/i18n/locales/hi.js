@@ -32,6 +32,40 @@ const hi = {
     },
 
     dashboard: {
+
+      currentTask: {
+        title: "अपना वर्तमान फसल कार्य पूरा करें",
+        finishTask: "वर्तमान फसल कार्य पूरा करें।",
+        pendingTasks:"{{stage}} के लिए {{count}} कार्य अभी बाकी हैं।",
+        openDashboard: "फसल डैशबोर्ड खोलें",
+        currentStage: "वर्तमान चरण",
+      },
+
+      nextStage: {
+        title: "{{stage}} चरण पर जाएँ",
+        description: "वर्तमान चरण पूरा हो गया है। फसल की आगे की प्रक्रिया जारी रखने के लिए फसल डैशबोर्ड खोलें।",
+        label: "फसल चक्र जारी रखें",
+      },
+
+      cycleComplete: {
+        title: "फसल चक्र पूरा करें",
+        description:"सभी चरण और कार्य पूरे हो गए हैं। फसल चक्र बंद करने से पहले अंतिम चक्र की समीक्षा करें।",
+      },
+
+      completedCycle: {
+        title: "पूरे हो चुके फसल चक्र की समीक्षा करें",
+        description: "फसल की पूरी प्रक्रिया, पूरे किए गए कार्य और दर्ज किए गए परिणाम देखें।",
+      },
+
+      noStageTasks: {
+        title: "वर्तमान चरण के लिए कार्य निर्धारित करें",
+        description:"{{stage}} के लिए अभी कोई कार्य दर्ज नहीं है।",
+      },
+
+      loading: {
+        title: "आपका खेत लोड हो रहा है",
+        description: "आज की जानकारी तैयार की जा रही है...",
+      },
       title: "खेत डैशबोर्ड",
       viewingField: "देखा जा रहा खेत",
       activeField: "सक्रिय खेत",
@@ -944,6 +978,17 @@ const hi = {
       passwordsDoNotMatch: "दोनों पासवर्ड मेल नहीं खाते।",
       signupFailed: "आपका खाता नहीं बन सका। कृपया फिर से प्रयास करें।",
       userAlreadyExists: "यह खाता पहले से मौजूद है। कृपया साइन इन करें।",
+    },
+
+    header: {
+      myFarm: "मेरा खेत",
+      governmentSchemes: "सरकारी योजनाएँ",
+      guidance: "मार्गदर्शन",
+      openNavigationMenu: "नेविगेशन मेनू खोलें",
+      goToHome: "KrishiSphere के होम पेज पर जाएँ",
+      notifications: "सूचनाएँ",
+      farmer: "किसान",
+      openSettingsFor: "{{name}} की सेटिंग खोलें",
     },
   },
 };

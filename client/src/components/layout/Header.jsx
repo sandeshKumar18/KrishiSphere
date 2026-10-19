@@ -16,7 +16,7 @@ import FarmAlerts from "../../pages/FarmAlerts.jsx";
 const Header = ({ onMenuClick }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t,i18n } = useTranslation();
 
   const farmerName =
     user?.name ||
@@ -44,7 +44,7 @@ const Header = ({ onMenuClick }) => {
           type="button"
           className="menu-button"
           onClick={onMenuClick}
-          aria-label="Open navigation menu"
+          aria-label={t("header.openNavigationMenu")}
         >
           <Menu size={22} />
         </button>
@@ -53,7 +53,7 @@ const Header = ({ onMenuClick }) => {
           type="button"
           className="brand-button"
           onClick={() => navigate("/")}
-          aria-label="Go to KrishiSphere home"
+          aria-label={t("header.goToHome")}
         >
           <span className="brand-name">
             <img
@@ -74,7 +74,7 @@ const Header = ({ onMenuClick }) => {
           className="farm-selector"
           onClick={() => navigate("/fields")}
         >
-          My Farm
+           {t("header.myFarm")}
         </button>
 
         <button
@@ -84,7 +84,7 @@ const Header = ({ onMenuClick }) => {
             navigate("/government-schemes")
           }
         >
-          Government Schemes
+          {t("header.governmentSchemes")}
         </button>
 
         <button
@@ -93,7 +93,7 @@ const Header = ({ onMenuClick }) => {
           onClick={() => navigate("/guidance")}
           aria-label="Open KrishiSphere guidance"
         >
-          Guidance
+          {t("header.guidance")}
         </button>
 
       </div>
@@ -132,7 +132,7 @@ const Header = ({ onMenuClick }) => {
 
         <div
           className="notification-icon-only"
-          aria-label="Notifications"
+          aria-label={t("header.notifications")}
         >
           <FarmAlerts size={20} />
         </div>
@@ -141,7 +141,7 @@ const Header = ({ onMenuClick }) => {
           type="button"
           className="farm-selector"
           onClick={() => navigate("/settings")}
-          aria-label={`Open settings for ${farmerName}`}
+          aria-label={t("header.openSettingsFor", {name: farmerName,})}
         >
 
           <div className="user-avatar">
@@ -154,7 +154,7 @@ const Header = ({ onMenuClick }) => {
             </span>
 
             <span className="user-role">
-              Farmer
+              {t("header.farmer")}
             </span>
           </div>
 

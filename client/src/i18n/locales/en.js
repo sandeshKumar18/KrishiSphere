@@ -32,6 +32,40 @@ const en = {
     },
 
     dashboard: {
+      currentTask: {
+        title: "Complete your current crop task",
+        finishTask: "Finish the current crop task.",
+        pendingTasks:
+          "{{count}} tasks are still pending for {{stage}}.",
+        openDashboard: "Open Crop Dashboard",
+        currentStage: "the current stage",
+      },
+
+      nextStage: {
+        title: "Move to {{stage}}",
+        description:"The current stage is complete. Continue the crop journey from the crop dashboard.",
+        label: "Continue Crop Cycle",
+      },
+
+      cycleComplete: {
+        title: "Complete the crop cycle",
+        description: "All stages and tasks are complete. Review the final cycle before closing it.",
+      },
+
+      completedCycle: {
+        title: "Review the completed crop cycle",
+        description: "View the crop journey, completed tasks and recorded results.",
+      },
+
+      noStageTasks: {
+        title: "Set up the current stage task",
+        description:"No task is currently recorded for {{stage}}.",
+      },
+
+      loading: {
+        title: "Loading your farm",
+        description: "Preparing today's overview...",
+      },
       title: "Farm Dashboard",
       viewingField: "Viewing field",
       activeField: "Active field",
@@ -947,6 +981,17 @@ const en = {
       passwordsDoNotMatch: "Passwords do not match.",
       signupFailed: "Unable to create your account.",
       userAlreadyExists: "User already exists. Please sign in instead.",
+    },
+
+    header: {
+      myFarm: "My Farm",
+      governmentSchemes: "Government Schemes",
+      guidance: "Guidance",
+      openNavigationMenu: "Open navigation menu",
+      goToHome: "Go to KrishiSphere home",
+      notifications: "Notifications",
+      farmer: "Farmer",
+      openSettingsFor: "Open settings for {{name}}",
     },
   },
 };
