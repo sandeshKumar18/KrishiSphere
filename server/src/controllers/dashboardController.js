@@ -38,7 +38,7 @@ const timedRequest = async (
   }
 };
 
- const withTimeout = (promise, timeoutMs, fallback, label) => {
+const withTimeout = (promise, timeoutMs, fallback, label) => {
   return Promise.race([
     promise,
 
@@ -842,33 +842,7 @@ export const getCropCycleDashboardSupplementary = async (
     );
 
     const marketPromise = cropCycle.cropId?.name
-      ? withTimeout(
-          getMarketPrices({
-            state: field.location?.state,
-            district: field.location?.district,
-            commodity: cropCycle.cropId.name,
-          }).catch((error) => {
-            console.error(
-              "[DASHBOARD SUPPLEMENTARY][MARKET] failed:",
-              error.message
-            );
 
-            return {
-              records: [],
-              scope: "none",
-            };
-          }),
-          3000,
-          {
-            records: [],
-            scope: "none",
-          },
-          "SUPPLEMENTARY MARKET"
-        )
-      : Promise.resolve({
-          records: [],
-          scope: "none",
-        });
 
     const [weather, market] =
       await Promise.all([

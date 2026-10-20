@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getCropCycleDashboard,
+  getCropCycleDashboardSupplementary,
 } from "../controllers/dashboardController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -14,4 +15,9 @@ router.get(
   getCropCycleDashboard
 );
 
+router.get(
+  "/crop-cycles/:cropCycleId/dashboard/supplementary",
+  protect,
+  getCropCycleDashboardSupplementary
+);
 export default router;
